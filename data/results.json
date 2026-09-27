@@ -86,6 +86,222 @@
    }
   ]
  },
+ "overall": {
+  "label": "All environments",
+  "environments": 118,
+  "cases": 25015,
+  "rows": [
+   {
+    "provider": "OpenAI",
+    "logo": "openai",
+    "model": "GPT-5.6 Sol",
+    "params": "\u2014",
+    "scaffold": "Codex",
+    "source": "closed",
+    "genCommon": 57.59,
+    "genProfessional": 56.37,
+    "gen": 56.88694915254237
+   },
+   {
+    "provider": "OpenAI",
+    "logo": "openai",
+    "model": "GPT-5.6 Luna",
+    "params": "\u2014",
+    "scaffold": "Codex",
+    "source": "closed",
+    "genCommon": 55.75,
+    "genProfessional": 50.81,
+    "gen": 52.90322033898305
+   },
+   {
+    "provider": "OpenAI",
+    "logo": "openai",
+    "model": "GPT-5.6 Terra",
+    "params": "\u2014",
+    "scaffold": "Codex",
+    "source": "closed",
+    "genCommon": 56.69,
+    "genProfessional": 54.81,
+    "gen": 55.606610169491525
+   },
+   {
+    "provider": "OpenAI",
+    "logo": "openai",
+    "model": "GPT-6 Astra",
+    "params": "\u2014",
+    "scaffold": "Codex",
+    "source": "closed",
+    "genCommon": 58.13,
+    "genProfessional": 60.36,
+    "gen": 59.415084745762705
+   },
+   {
+    "provider": "Anthropic",
+    "logo": "anthropic",
+    "model": "Claude Opus 5",
+    "params": "\u2014",
+    "scaffold": "Claude Code",
+    "source": "closed",
+    "genCommon": 58.35,
+    "genProfessional": 59.09,
+    "gen": 58.77644067796611
+   },
+   {
+    "provider": "ByteDance",
+    "logo": "bytedance",
+    "model": "Doubao-seed-evolving",
+    "params": "\u2014",
+    "scaffold": "Claude Code",
+    "source": "closed",
+    "genCommon": 47.46,
+    "genProfessional": 52.03,
+    "gen": 50.0935593220339
+   },
+   {
+    "provider": "Alibaba",
+    "logo": "alibaba",
+    "model": "Qwen3.8-27B",
+    "params": "27B",
+    "scaffold": "Claude Code",
+    "source": "open",
+    "genCommon": 51.32,
+    "genProfessional": 55.12,
+    "gen": 53.50983050847457
+   },
+   {
+    "provider": "Alibaba",
+    "logo": "alibaba",
+    "model": "Qwen3.8-27B",
+    "params": "27B",
+    "scaffold": "OpenCode",
+    "source": "open",
+    "genCommon": 55.42,
+    "genProfessional": 53.59,
+    "gen": 54.36542372881357
+   },
+   {
+    "provider": "Alibaba",
+    "logo": "alibaba",
+    "model": "Qwen3.8-27B",
+    "params": "27B",
+    "scaffold": "OpenHands",
+    "source": "open",
+    "genCommon": 52.28,
+    "genProfessional": 53.92,
+    "gen": 53.22508474576271
+   },
+   {
+    "provider": "Alibaba",
+    "logo": "alibaba",
+    "model": "Qwen3.8-27B",
+    "params": "27B",
+    "scaffold": "Qwen Code",
+    "source": "open",
+    "genCommon": 49.89,
+    "genProfessional": 53.11,
+    "gen": 51.74559322033898
+   },
+   {
+    "provider": "Alibaba",
+    "logo": "alibaba",
+    "model": "Qwen3.6-35B-A3B",
+    "params": "35B/3B",
+    "scaffold": "Claude Code",
+    "source": "open",
+    "genCommon": 41.27,
+    "genProfessional": 40.97,
+    "gen": 41.0971186440678
+   },
+   {
+    "provider": "Alibaba",
+    "logo": "alibaba",
+    "model": "Qwen3.6-35B-A3B",
+    "params": "35B/3B",
+    "scaffold": "OpenCode",
+    "source": "open",
+    "genCommon": 39.43,
+    "genProfessional": 38.39,
+    "gen": 38.830677966101696
+   },
+   {
+    "provider": "Alibaba",
+    "logo": "alibaba",
+    "model": "Qwen3.6-35B-A3B",
+    "params": "35B/3B",
+    "scaffold": "Qwen Code",
+    "source": "open",
+    "genCommon": 36.14,
+    "genProfessional": 38.0,
+    "gen": 37.21186440677966
+   },
+   {
+    "provider": "MiniMax",
+    "logo": "minimax",
+    "model": "MiniMax-M3",
+    "params": "428B/23B",
+    "scaffold": "Claude Code",
+    "source": "open",
+    "genCommon": 43.24,
+    "genProfessional": 44.96,
+    "gen": 44.23118644067797
+   },
+   {
+    "provider": "Z.ai",
+    "logo": "zai",
+    "model": "GLM-5.3-Flash",
+    "params": "320B/18B",
+    "scaffold": "Claude Code",
+    "source": "open",
+    "genCommon": 53.89,
+    "genProfessional": 54.44,
+    "gen": 54.20694915254237
+   },
+   {
+    "provider": "Z.ai",
+    "logo": "zai",
+    "model": "GLM-5.3",
+    "params": "744B/40B",
+    "scaffold": "Claude Code",
+    "source": "open",
+    "genCommon": 52.87,
+    "genProfessional": 58.17,
+    "gen": 55.924237288135586
+   },
+   {
+    "provider": "DeepSeek",
+    "logo": "deepseek",
+    "model": "DeepSeek-v4.1-flash",
+    "params": "552B/8B-16B",
+    "scaffold": "Claude Code",
+    "source": "open",
+    "genCommon": 49.42,
+    "genProfessional": 55.83,
+    "gen": 53.11389830508475
+   },
+   {
+    "provider": "DeepSeek",
+    "logo": "deepseek",
+    "model": "DeepSeek-v4-pro",
+    "params": "1.6T/49B",
+    "scaffold": "Claude Code",
+    "source": "open",
+    "genCommon": 50.1,
+    "genProfessional": 48.92,
+    "gen": 49.419999999999995
+   },
+   {
+    "provider": "Moonshot",
+    "logo": "moonshot",
+    "model": "Kimi K3",
+    "params": "2.8T/104B",
+    "scaffold": "Claude Code",
+    "source": "open",
+    "genCommon": 54.9,
+    "genProfessional": 57.19,
+    "gen": 56.21966101694915
+   }
+  ]
+ },
  "subsets": {
   "common": {
    "label": "Common",

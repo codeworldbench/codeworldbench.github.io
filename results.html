@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Results — CodeWorldBench</title>
+<meta name="description" content="Full CodeWorldBench result tables: per-category scores, GEN, and SWE pass-to-pass and fail-to-pass rates for the common and professional subsets.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-all-scaffolds="true">
+<a class="skip-link" href="#tables">Skip to tables</a>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="./"><span class="prompt">$</span>CodeWorldBench</a>
+    <div class="nav-links">
+      <a href="./">Leaderboard</a>
+      <a href="benchmark.html">Benchmark</a>
+      <a href="results.html" aria-current="page">Results</a>
+      <a href="analysis.html">Analysis</a>
+      <a href="run.html">Run it</a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">Results</p>
+    <h1>Full result tables</h1>
+    <p class="tagline">
+      Every model–scaffold pair, per category, with construction and repair reported side by side
+      rather than averaged together.
+    </p>
+  </div>
+</header>
+
+<section id="aggregation" class="flush">
+  <div class="wrap">
+    <h2><span class="hash">#</span>How to read these numbers</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>GEN and category columns are macro-averages</h3>
+        <p>
+          The mean of per-environment case pass rates — passed cases over total cases, computed inside
+          each environment, then averaged across environments. Every environment carries equal weight
+          regardless of how many cases it holds.
+        </p>
+      </div>
+      <div class="card">
+        <h3>P2P and F2P are micro-averages</h3>
+        <p>
+          Case counts are pooled across environments. P2P divides still-passing by initially passing
+          cases; F2P divides newly passing by initially failing cases. Every case carries equal
+          weight.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Why the leaderboard shows GEN alone</h3>
+        <p>
+          Because GEN is a macro-average over environments, the all-118 score is the
+          environment-weighted mean of the two subsets. P2P and F2P cannot be combined the same way
+          without per-subset case counts, so they are reported per subset here.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="tables">
+  <div class="wrap">
+    <div class="lb-head">
+      <h2><span class="hash">#</span>By subset</h2>
+      <div class="lb-controls">
+        <div class="toggle" role="group" aria-label="Subset">
+          <button type="button" data-subset="common" aria-pressed="true">Common · 50 env</button>
+          <button type="button" data-subset="professional" aria-pressed="false">Professional · 68 env</button>
+        </div>
+        <label class="check">
+          <input type="checkbox" id="all-scaffolds">
+          Show every scaffold
+        </label>
+        <span class="lb-hint" id="lb-subset-meta"></span>
+      </div>
+    </div>
+
+    <div class="table-scroll" id="lb-subset">
+      <p class="lb-error">Loading results…</p>
+    </div>
+
+    <p class="legend">
+      <b>GEN</b> full-surface construction pass rate · <b>P2P</b> pass-to-pass preservation ·
+      <b>F2P</b> fail-to-pass repair. Category codes are spelled out on the
+      <a href="benchmark.html#categories">benchmark page</a>. Green marks the best value in a column;
+      click any score header to re-sort. OpenAI models run under Codex v0.154.0, every other model
+      under Claude Code v2.1.251, with OpenCode, OpenHands, and Qwen Code retained for the two Qwen
+      models.
+    </p>
+  </div>
+</section>
+
+<section id="by-subset-figure">
+  <div class="wrap">
+    <h2><span class="hash">#</span>Construction by subset</h2>
+    <figure>
+      <img src="assets/figures/codeworldbench_model_avg_by_scaffold.png"
+           alt="GEN scores macro-averaged across all 118 environments, the 50 common environments, and the 68 professional environments, with one bar per model, colored by creator and hatched for closed-source models.">
+      <figcaption>
+        <b>GEN by subset.</b> Macro-averaged across (a) all 118 environments, (b) the 50 common
+        environments, and (c) the 68 professional environments. Each panel is ordered independently,
+        bar colour is the model's creator, hatching marks closed-source models.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="observations">
+  <div class="wrap">
+    <h2><span class="hash">#</span>What the tables show</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>Construction is the bottleneck, and preservation hides it</h3>
+        <p>
+          P2P averages <span class="num">96.5</span> on common and <span class="num">94.0</span> on
+          professional, with every row above 90 on common and all but one on professional. Mean F2P is
+          <span class="num">16.5</span> and <span class="num">25.2</span>; mean GEN sits between them
+          at <span class="num">50.7</span> and <span class="num">51.9</span>, over a 22-point spread in
+          both pools.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Repair is not ordered by construction</h3>
+        <p>
+          The strongest professional F2P rows are Qwen3.8-27B under Qwen Code
+          (<span class="num">45.3</span>) and Claude Code (<span class="num">44.9</span>), above every
+          closed-source row, where Claude Opus 5 leads at <span class="num">33.5</span>. Those rows
+          rank twelfth and seventh on GEN. Not a family effect: Qwen3.6-35B-A3B repairs at 8.6–10.7.
+        </p>
+      </div>
+      <div class="card">
+        <h3>The model moves a score more than the scaffold</h3>
+        <p>
+          Professional GEN spread across scaffolds is <span class="num">2.0</span> points for
+          Qwen3.8-27B and <span class="num">3.0</span> for Qwen3.6-35B-A3B (5.5 and 5.1 on common),
+          against a <span class="num">14.8</span>-point professional gap between the two families.
+          Repair is the scaffold-sensitive half: professional F2P for Qwen3.8-27B ranges 29.2 to 45.3.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Category strength is not overall ranking</h3>
+        <p>
+          Across the 14 default-scaffold models, common scores average <span class="num">66.7</span> in
+          Geospatial Construction and <span class="num">32.2</span> in Manufacturing Agriculture;
+          professional averages are <span class="num">71.5</span> in Supply Operations and
+          <span class="num">28.4</span> in Enterprise Operations. MiniMax-M3 leads Enterprise
+          Operations (39.75) ahead of GPT-6 Astra (24.26) despite lower overall GEN (44.96 vs. 60.36).
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Figures and numbers are taken from the paper.</p>
+    <p>Apache License 2.0.</p>
+  </div>
+</footer>
+
+<script src="js/leaderboard.js"></script>
+</body>
+</html>

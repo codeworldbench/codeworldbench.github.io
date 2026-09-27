@@ -1,10 +1,43 @@
 # CodeWorldBench — project site
 
-Static site for the CodeWorldBench paper: overview figure, the two result tables as a sortable
-leaderboard, trajectory analysis, downstream transfer, and run instructions.
+Static site for the CodeWorldBench paper. The home page carries the headline leaderboard and little
+else; detail lives on four sub-pages.
 
 No build step and no dependencies. Every number and figure is derived from the paper source, not
 retyped.
+
+## Pages
+
+| Page | Holds |
+| --- | --- |
+| `index.html` | Hero, the all-118-environment GEN leaderboard, three takeaways, the overview figure |
+| `results.html` | Aggregation definitions, both subset tables in full, the by-subset figure, detailed observations |
+| `benchmark.html` | Task formalism, the two settings, construction pipeline, static profile, 20 domains |
+| `analysis.html` | Difficulty slices, scaffold effects, trace analysis, downstream transfer, conclusion |
+| `run.html` | Install, unpack, register a model, generate, evaluate |
+
+## The all-118 ranking
+
+The home leaderboard ranks by GEN over all 118 environments, computed as the environment-weighted
+mean of the two subsets:
+
+```
+GEN_all = (50 * GEN_common + 68 * GEN_professional) / 118
+```
+
+That is a genuine macro-average over all 118 environments, because GEN is itself a macro-average of
+per-environment pass rates. It reproduces panel (a) of the `model_avg_by_scaffold` figure exactly, to
+the reported decimal, in both value and bar order — `tools/build_results.py` is checked against the
+figure whenever it is regenerated.
+
+P2P and F2P are deliberately absent from that table. They micro-average cases, so combining them
+needs each subset's initially-passing and initially-failing counts, and the paper publishes only the
+totals over both subsets (9,753 and 15,262). An environment-weighted mean of two micro-averages is
+not a micro-average, so the SWE columns stay on `results.html`, per subset, where they are exact.
+
+The home table shows the 14 default-scaffold rows, matching the paper's figures. `results.html` opts
+into all 19 rows via `data-all-scaffolds="true"` on `<body>`, matching the paper's tables. Either
+table can be switched with the "Show every scaffold" checkbox.
 
 ## Preview locally
 
@@ -19,9 +52,13 @@ Then open <http://localhost:8000/>.
 ## Layout
 
 ```
-index.html                 single page
+index.html                 home: hero + leaderboard
+results.html               full tables
+benchmark.html             how the benchmark works
+analysis.html              trajectory analysis + downstream
+run.html                   run instructions
 css/style.css              styles
-js/leaderboard.js          renders data/results.json, client-side sorting
+js/leaderboard.js          renders both table kinds, client-side sorting
 data/results.json          GENERATED — do not edit by hand
 tools/build_results.py     regenerates data/results.json from the paper
 assets/figures/*.png       figures rasterized from the paper PDFs

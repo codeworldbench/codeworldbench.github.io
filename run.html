@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Run it — CodeWorldBench</title>
+<meta name="description" content="Install CodeWorldBench, unpack the dataset, register a model, generate with a pinned agent CLI, and evaluate.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#steps">Skip to steps</a>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="./"><span class="prompt">$</span>CodeWorldBench</a>
+    <div class="nav-links">
+      <a href="./">Leaderboard</a>
+      <a href="benchmark.html">Benchmark</a>
+      <a href="results.html">Results</a>
+      <a href="analysis.html">Analysis</a>
+      <a href="run.html" aria-current="page">Run it</a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">Run it</p>
+    <h1>From clone to leaderboard</h1>
+    <p class="tagline">
+      Python 3.12. The agent CLI must already be on <code>PATH</code> — the benchmark launches it but
+      does not install it.
+    </p>
+    <div class="note">
+      Generated repositories execute untrusted model-written code with no container isolation. Run only
+      in a disposable environment with no sensitive credentials.
+    </div>
+  </div>
+</header>
+
+<section id="steps" class="flush">
+  <div class="wrap">
+    <ol class="steps">
+      <li>
+        <h3>Install</h3>
+        <p>Set a scratch directory on a disk with room to spare; generation workspaces are large.</p>
+<pre><code><span class="c"># in the CodeWorldBench repository root</span>
+pip install -e .
+<span class="k">export</span> CWB_TMP_ROOT=<span class="s">/path/to/scratch</span></code></pre>
+        <p>
+          <code>CWB_ROOT</code>, <code>CWB_DATA_ROOT</code>, and <code>CWB_WORK_ROOT</code> relocate
+          config, dataset, and working state.
+        </p>
+      </li>
+
+      <li>
+        <h3>Unpack the data</h3>
+        <p>
+          The dataset ships as two archives under <code>dataset/archives/</code>:
+          <code>sources.tar.gz</code> (the 118 environment workspaces) and
+          <code>eval_assets.tar.gz</code> (case bundles and SWE baselines). Extract both at the
+          repository root — each already contains its own top-level directory.
+        </p>
+<pre><code>tar -xzf dataset/archives/sources.tar.gz       <span class="c"># -&gt; sources/</span>
+tar -xzf dataset/archives/eval_assets.tar.gz  <span class="c"># -&gt; eval_assets/</span></code></pre>
+        <p>
+          Expect roughly 1.2 GB unpacked. To verify the archives first:
+          <code>cd dataset/archives &amp;&amp; sha256sum -c SHA256SUMS</code>. The extracted directories
+          are gitignored, so unpacking in place leaves the working tree clean.
+        </p>
+      </li>
+
+      <li>
+        <h3>Register a model</h3>
+<pre><code>printf <span class="s">'%s\n'</span> <span class="s">"$YOUR_API_KEY"</span> | cwb model \
+  --mode api \
+  --base-url <span class="s">https://your-endpoint/v1</span> \
+  --api-key-stdin \
+  --api-model <span class="s">YOUR_MODEL_NAME</span></code></pre>
+        <p>
+          Use <code>--mode api</code> for hosted OpenAI-compatible providers, <code>--mode vllm</code>
+          or <code>--mode sglang</code> for self-hosted ones. Repeat for every model. Credentials land
+          in a gitignored directory. Refer to the model by its registered name from here on.
+        </p>
+      </li>
+
+      <li>
+        <h3>Generate</h3>
+        <p>
+          Install the pinned scaffold version first. Agent CLIs change their prompting and tool
+          behavior between releases, so scores are only comparable at a fixed version — the reported
+          Claude Code numbers use <strong>v2.1.251</strong>, and OpenAI models use Codex v0.154.0.
+        </p>
+<pre><code>npm install -g @anthropic-ai/claude-code@2.1.251
+
+cwb run --scaffolds cc --models <span class="s">YOUR_MODEL_NAME</span> --max-concurrent-settings 24</code></pre>
+        <p>
+          One model–scaffold pair over the full dataset schedules 236 tasks (118 environments × 2
+          settings). Add <code>--continue</code> to resume the latest run and retry failed work; narrow
+          the scope with <code>--env-id</code> and <code>--settings</code>.
+        </p>
+<pre><code>cwb status --models <span class="s">YOUR_MODEL_NAME</span>   <span class="c"># progress</span>
+cwb stop   --models <span class="s">YOUR_MODEL_NAME</span>   <span class="c"># stop a run</span></code></pre>
+        <p>
+          Eight scaffolds ship in <code>config/scaffolds/</code>: <code>cc</code> (Claude Code, the
+          default), <code>openhands</code>, <code>opencode</code>, <code>qwencode-bailian</code>,
+          <code>zcode-official</code>, <code>codex</code>, <code>kimi-code-cli</code>,
+          <code>minimax-cli</code>. Each is one TOML file plus an exec script; see
+          <code>CONTRIBUTING.md</code> to add your own.
+        </p>
+      </li>
+
+      <li>
+        <h3>Evaluate</h3>
+<pre><code>cwb eval --scaffolds cc --models <span class="s">YOUR_MODEL_NAME</span> --settings GEN,SWE</code></pre>
+        <p>
+          Each generated workspace is graded in place by one pytest process per setting against the
+          canonical case bundle; the workspace database is restored afterwards. Settings run in
+          parallel via <code>--max-workers</code>.
+        </p>
+        <p>
+          Results land under <code>eval/results/</code> as one file per setting plus a
+          <code>measurement.json</code> summary, and only the requested scope is replaced.
+          Leaderboards go to <code>reports/</code> with per-domain and per-tier scores, GEN, P2P, F2P,
+          and token totals. Every run records digests of the source tree, evaluation assets, and case
+          set, so a score traces back to the exact inputs that produced it.
+        </p>
+      </li>
+    </ol>
+
+    <h2><span class="hash">#</span>Reading your scores</h2>
+    <p class="section-sub">
+      GEN and the category columns are <strong>macro</strong>-averages over environments; P2P and F2P
+      are <strong>micro</strong>-averages over cases. Mixing the two aggregations produces numbers that
+      look plausible and are not comparable to anything published here. The
+      <a href="results.html#aggregation">results page</a> spells out both definitions.
+    </p>
+
+    <div class="next-row">
+      <a class="btn btn-primary" href="results.html">Compare against the tables</a>
+      <a class="btn" href="benchmark.html">Benchmark details</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Figures and numbers are taken from the paper.</p>
+    <p>Apache License 2.0.</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CodeWorldBench — How Well Can Coding Agents Build Executable Agent Worlds?</title>
-<meta name="description" content="CodeWorldBench evaluates whether coding agents can construct and repair executable, stateful code worlds: 118 environments, 25,015 hidden behavioral cases, verified on outputs and persistent state.">
+<title>CodeWorldBench — Can coding agents build executable agent worlds?</title>
+<meta name="description" content="CodeWorldBench evaluates whether coding agents can construct and repair executable, stateful code worlds. 118 environments, 25,015 hidden cases, graded on outputs and persistent state.">
 <meta name="robots" content="noindex, nofollow">
 <meta property="og:title" content="CodeWorldBench">
-<meta property="og:description" content="118 executable environments, 25,015 hidden cases, two settings: construct a stateful code world from scratch (GEN) or repair a broken one (SWE).">
+<meta property="og:description" content="118 executable environments, 25,015 hidden cases. Build a stateful code world from scratch, or repair a broken one.">
 <meta property="og:type" content="website">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="css/style.css">
@@ -17,42 +17,24 @@
 
 <nav class="nav">
   <div class="nav-inner">
-    <a class="nav-brand" href="#top"><span class="prompt">$</span>CodeWorldBench</a>
+    <a class="nav-brand" href="./"><span class="prompt">$</span>CodeWorldBench</a>
     <div class="nav-links">
-      <a href="#overview">Overview</a>
-      <a href="#benchmark">Benchmark</a>
       <a href="#leaderboard">Leaderboard</a>
-      <a href="#findings">Findings</a>
-      <a href="#analysis">Analysis</a>
-      <a href="#downstream">Downstream</a>
-      <a href="#run">Run it</a>
+      <a href="benchmark.html">Benchmark</a>
+      <a href="results.html">Results</a>
+      <a href="analysis.html">Analysis</a>
+      <a href="run.html">Run it</a>
     </div>
   </div>
 </nav>
 
-<header class="hero" id="top">
+<header class="hero hero-tight" id="top">
   <div class="wrap">
     <p class="eyebrow">Execution-based benchmark · code-driven world construction</p>
-    <h1>How well can coding agents build<br>executable agent worlds?<span class="cursor"></span></h1>
+    <h1>Can coding agents build<br>executable agent worlds?<span class="cursor"></span></h1>
     <p class="tagline">
-      Agents routinely emit runnable repositories. CodeWorldBench asks the harder question:
-      does the world they build actually transition the way its specification says it should?
-    </p>
-
-    <p class="abstract">
-      Modern coding agents increasingly demonstrate the capability to scale and generate complex
-      interactive agent environments. Existing benchmarks evaluate generating repositories from
-      scratch or repairing localized bugs, leaving the capacity to construct fully functional,
-      <strong>stateful</strong> environments largely unmeasured. CodeWorldBench assesses the quality of
-      code-driven world construction across <strong>118 environments</strong> spanning common workflows
-      and professional software domains. Rather than relying on code similarity, we test
-      <strong>behavioral equivalence</strong>: submitted and reference worlds start from the same seed,
-      receive hidden tool calls, and are compared on their outputs and resulting states. While models
-      preserve already-correct behavior, they struggle to construct environments from scratch and
-      fail at repairing broken behavior — failing on state transitions and validation order rather
-      than syntax. Because agent-built environments increasingly serve as the grounding for training
-      subsequent models, an environment that runs but transitions incorrectly supplies a damaging
-      false signal.
+      Agents emit runnable repositories routinely. CodeWorldBench asks the harder question: does the
+      world they build transition the way its specification says it should?
     </p>
 
     <div class="stats">
@@ -60,595 +42,124 @@
       <div class="stat"><span class="n">25,015</span><span class="k">Hidden cases</span></div>
       <div class="stat"><span class="n">4,417</span><span class="k">Tools</span></div>
       <div class="stat"><span class="n">20</span><span class="k">Domains</span></div>
-      <div class="stat"><span class="n">2</span><span class="k">Settings (GEN / SWE)</span></div>
-      <div class="stat"><span class="n">19</span><span class="k">Evaluated rows</span></div>
+      <div class="stat"><span class="n">2</span><span class="k">Settings</span></div>
     </div>
 
     <div class="btn-row">
-      <a class="btn btn-primary" href="#leaderboard">View leaderboard</a>
-      <a class="btn" href="#run">Run the benchmark</a>
+      <a class="btn btn-primary" href="run.html">Run the benchmark</a>
+      <a class="btn" href="benchmark.html">How it works</a>
     </div>
   </div>
 </header>
 
-<section id="overview">
+<section id="leaderboard" class="flush">
   <div class="wrap">
-    <h2><span class="hash">#</span>Overview</h2>
+    <div class="lb-head">
+      <h2><span class="hash">#</span>Leaderboard</h2>
+      <div class="lb-controls">
+        <label class="check">
+          <input type="checkbox" id="all-scaffolds">
+          Show every scaffold
+        </label>
+        <span class="lb-hint" id="lb-overall-meta"></span>
+      </div>
+    </div>
+
     <p class="section-sub">
-      Given a task specification, an agent must produce an executable repository implementing a
-      stateful environment: seed database, entity schemas, tool interfaces, runtime state, event
-      logic, and hidden behavioral rules. The evaluator initializes the reference and the submitted
-      implementation from the same seed, executes hidden tool calls, and compares outputs and
-      resulting state projections — so a repository that answers plausibly while mutating state
-      incorrectly does not pass.
+      GEN is the construction pass rate over all 118 environments — the macro-average of
+      per-environment case pass rates, so every environment counts equally.
+    </p>
+
+    <div class="table-scroll" id="lb-overall">
+      <p class="lb-error">Loading results…</p>
+    </div>
+
+    <p class="legend">
+      OpenAI models run under Codex v0.154.0, every other model under Claude Code v2.1.251.
+      Green marks the best value in a column; click any score header to re-sort.
+      <a href="results.html">Full tables</a> carry the ten category columns and the SWE
+      pass-to-pass and fail-to-pass rates for each subset.
+    </p>
+  </div>
+</section>
+
+<section id="takeaways">
+  <div class="wrap">
+    <h2><span class="hash">#</span>What we found</h2>
+    <div class="cards cards-3">
+      <div class="card">
+        <h3>Preservation looks solved. It is not the task.</h3>
+        <p>
+          Keeping already-correct behavior alive averages <span class="num">96.5</span> on common and
+          <span class="num">94.0</span> on professional. Repair of broken behavior averages
+          <span class="num">16.5</span> and <span class="num">25.2</span>. A protocol that scores only
+          surviving tests would miss the entire gap.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Repair is not construction.</h3>
+        <p>
+          The best professional repair rows are Qwen3.8-27B (<span class="num">45.3</span> and
+          <span class="num">44.9</span>), above every closed-source model — yet those same rows rank
+          twelfth and seventh on construction. The two settings measure different capabilities.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Failures are semantic, not syntactic.</h3>
+        <p>
+          Generated repositories pass structural setup and then mismanage state: stale counters,
+          shallow success envelopes, inconsistent views. Agents build first and validate transition
+          rules later, or never.
+        </p>
+      </div>
+    </div>
+    <p class="more"><a href="analysis.html">Read the full analysis →</a></p>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <h2><span class="hash">#</span>How it works</h2>
+    <p class="section-sub">
+      Reference and submitted worlds start from the same seed, receive the same hidden tool calls, and
+      are compared on their outputs <em>and</em> their resulting states. A repository that answers
+      plausibly while mutating state incorrectly does not pass.
     </p>
 
     <figure>
       <img src="assets/figures/codeworldbench_overview_editable_v8_landscape.png"
            alt="CodeWorldBench overview: agents either build a world from a workspace containing initial data or fix semantic defects in an existing implementation; hidden behavioral tests apply identical tool calls to the reference and agent-built worlds and compare outputs, persistent state, and event effects.">
       <figcaption>
-        <b>CodeWorldBench overview.</b> Agents either build a world from a workspace containing
-        initial data, or fix semantic defects in an existing implementation. Hidden behavioral tests
-        apply identical tool calls to reference and agent-built worlds, comparing outputs, persistent
-        state, and event effects. The results reveal a gap between runnable code and faithful world
-        behavior, with semantic errors limiting downstream agent performance.
+        <b>Overview.</b> Agents either build a world from a workspace containing initial data, or fix
+        semantic defects in an existing implementation. Hidden behavioral tests apply identical tool
+        calls to reference and agent-built worlds, comparing outputs, persistent state, and event
+        effects.
       </figcaption>
     </figure>
 
     <div class="cards">
       <div class="card">
-        <h3><span class="tag">01</span>A world, formally</h3>
+        <h3><span class="tag">GEN</span>Construction</h3>
         <p>
-          A code world is <code>W = (D, S, T, V)</code>: seed database, runtime state space, tool set,
-          and hidden verification rules. Tools split into read-only query tools and state-mutating
-          tools.
+          Implement the world from scratch in a workspace holding initial data and tool
+          documentation. Graded on the full verified surface.
         </p>
       </div>
       <div class="card">
-        <h3><span class="tag">02</span>Behavioral equivalence</h3>
+        <h3><span class="tag">SWE</span>Repair</h3>
         <p>
-          Reference and submission both initialize from <code>s₀ = Init(D)</code>. A case passes only
-          if the returned value matches <em>and</em>, for mutating tools, the resulting state matches
-          the reference on every field designated by <code>V</code>.
-        </p>
-      </div>
-      <div class="card">
-        <h3><span class="tag">03</span>Two settings, one base</h3>
-        <p>
-          <span class="num">GEN</span> requires from-scratch construction; <span class="num">SWE</span>
-          supplies a runnable but semantically broken implementation to repair without regressing
-          behavior that is already correct. Reported side by side, never averaged.
+          Fix a runnable but semantically broken implementation without regressing behavior that
+          already works. Scored as P2P and F2P separately.
         </p>
       </div>
     </div>
-  </div>
-</section>
-
-<section id="benchmark">
-  <div class="wrap">
-    <h2><span class="hash">#</span>The benchmark</h2>
-    <p class="section-sub">
-      118 environments (50 common, 68 professional) with 4,417 tools — 32.9 and 40.8 per environment
-      respectively — and 25,015 hidden test cases (14,069 common, 10,946 professional). SWE splits
-      into 9,753 pass-to-pass and 15,262 fail-to-pass cases. State representations span static
-      tables, complex configurations, and event-driven databases.
-    </p>
-
-    <figure>
-      <img src="assets/figures/codeworldbench_category_distribution_1x4.png"
-           alt="Static profile of CodeWorldBench: category distribution as nested rings for the common and professional subsets, plus distributions of tool-surface size, interface arity, and hidden-test depth for each subset.">
-      <figcaption>
-        <b>Static profile.</b> (a) Category distribution — inner ring common, outer professional.
-        (b)–(d) Tool-surface size, interface arity, and hidden-test depth per subset.
-      </figcaption>
-    </figure>
-
-    <div class="two-col">
-      <div>
-        <h3>GEN — world construction</h3>
-        <p class="section-sub">
-          The agent implements the code world from scratch in a workspace containing initial data and
-          tool documentation, with contracts specifying entities, tool surfaces, and behavior. Hidden
-          tests execute against reset seed states across three nested slices: L1 (easiest 25%), L2
-          (easiest 50%), and L3 (the full surface — the number reported in the tables).
-        </p>
-      </div>
-      <div>
-        <h3>SWE — semantic repair</h3>
-        <p class="section-sub">
-          Semantic repair on runnable but defective repositories, where the defects arose during
-          generation. Tool surfaces and seed states are preserved and verification artifacts withheld
-          to prevent leakage. Fail-to-pass and pass-to-pass rates are reported separately, decoupling
-          bug fixes from regression avoidance.
-        </p>
-      </div>
-    </div>
-
-    <h3>Common categories · 50 environments</h3>
-    <div class="cat-grid">
-      <div class="cat-cell"><span class="code">CC</span><span class="name">Communication Collaboration</span></div>
-      <div class="cat-cell"><span class="code">ME</span><span class="name">Media Entertainment</span></div>
-      <div class="cat-cell"><span class="code">DI</span><span class="name">Data Intelligence</span></div>
-      <div class="cat-cell"><span class="code">ID</span><span class="name">Infrastructure Development</span></div>
-      <div class="cat-cell"><span class="code">FC</span><span class="name">Financial Compliance</span></div>
-      <div class="cat-cell"><span class="code">CL</span><span class="name">Commerce Logistics</span></div>
-      <div class="cat-cell"><span class="code">PS</span><span class="name">Public Service</span></div>
-      <div class="cat-cell"><span class="code">GC</span><span class="name">Geospatial Construction</span></div>
-      <div class="cat-cell"><span class="code">MA</span><span class="name">Manufacturing Agriculture</span></div>
-      <div class="cat-cell"><span class="code">EI</span><span class="name">Embodied Intelligence</span></div>
-    </div>
-
-    <h3>Professional categories · 68 environments</h3>
-    <div class="cat-grid">
-      <div class="cat-cell"><span class="code">ES</span><span class="name">Engineering Systems</span></div>
-      <div class="cat-cell"><span class="code">EB</span><span class="name">Embedded Systems</span></div>
-      <div class="cat-cell"><span class="code">SC</span><span class="name">Scientific Computing</span></div>
-      <div class="cat-cell"><span class="code">CM</span><span class="name">Creative Media</span></div>
-      <div class="cat-cell"><span class="code">EO</span><span class="name">Enterprise Operations</span></div>
-      <div class="cat-cell"><span class="code">FS</span><span class="name">Financial Services</span></div>
-      <div class="cat-cell"><span class="code">CP</span><span class="name">Commercial Platforms</span></div>
-      <div class="cat-cell"><span class="code">SO</span><span class="name">Supply Operations</span></div>
-      <div class="cat-cell"><span class="code">LG</span><span class="name">Legal Governance</span></div>
-      <div class="cat-cell"><span class="code">HE</span><span class="name">Health Education</span></div>
-    </div>
-  </div>
-</section>
-
-<section id="leaderboard">
-  <div class="wrap">
-    <h2><span class="hash">#</span>Leaderboard</h2>
-    <p class="section-sub">
-      One row per model–scaffold pair. GEN and the ten category scores macro-average per-environment
-      case pass rates, giving every environment equal weight. SWE micro-averages cases: P2P divides
-      still-passing by initially passing cases, F2P divides newly passing by initially failing cases.
-      All values are percentages over the selected subset.
-    </p>
-
-    <div class="lb-controls">
-      <div class="toggle" role="group" aria-label="Subset">
-        <button type="button" data-subset="common" aria-pressed="true">Common · 50 env</button>
-        <button type="button" data-subset="professional" aria-pressed="false">Professional · 68 env</button>
-      </div>
-      <label class="check">
-        <input type="checkbox" id="defaults-only">
-        Default scaffold only (14 models)
-      </label>
-      <span class="lb-meta lb-hint" id="lb-meta"></span>
-    </div>
-
-    <div class="table-scroll" id="lb-table">
-      <p style="padding:1rem;color:#8b95a3">Loading results…</p>
-    </div>
-
-    <p class="legend">
-      <b>Sorting:</b> click any score column header. <b>GEN:</b> full-surface (L3) construction pass
-      rate. <b>P2P:</b> pass-to-pass preservation. <b>F2P:</b> fail-to-pass repair.
-      <b>Scaffolds:</b> OpenAI models run under Codex v0.154.0; every other model runs under Claude
-      Code v2.1.251, with OpenCode, OpenHands, and Qwen Code retained for the two Qwen models.
-      Green marks the best value in a column. Numbers are generated directly from the paper's result
-      tables.
-    </p>
-
-    <figure style="margin-top:2rem">
-      <img src="assets/figures/codeworldbench_model_avg_by_scaffold.png"
-           alt="GEN scores macro-averaged across all 118 environments, the 50 common environments, and the 68 professional environments, with one bar per model, colored by creator and hatched for closed-source models.">
-      <figcaption>
-        <b>GEN by subset.</b> Scores macro-averaged across (a) all 118 environments, (b) the 50 common
-        environments, and (c) the 68 professional environments. Each panel is ordered independently,
-        bar colour is the model's creator, hatching marks closed-source models. OpenAI models run
-        under Codex and every other model under Claude Code.
-      </figcaption>
-    </figure>
-  </div>
-</section>
-
-<section id="findings">
-  <div class="wrap">
-    <h2><span class="hash">#</span>What the numbers say</h2>
-    <p class="section-sub">
-      Three results hold across both subsets, and none of them is visible to a protocol that only
-      counts surviving tests.
-    </p>
-
-    <div class="cards">
-      <div class="card">
-        <h3><span class="tag">01</span>Construction is the bottleneck, and preservation hides it</h3>
-        <p>
-          Preserving already-correct behavior averages <span class="num">96.5</span> on common and
-          <span class="num">94.0</span> on professional, with every row above 90 on common and all but
-          one on professional. A protocol scoring only surviving tests would call this solved.
-        </p>
-        <p>
-          Repair does not follow: mean F2P is <span class="num">16.5</span> and
-          <span class="num">25.2</span>, while construction sits between them at
-          <span class="num">50.7</span> and <span class="num">51.9</span> mean GEN — over a 22-point
-          spread in both pools.
-        </p>
-      </div>
-      <div class="card">
-        <h3><span class="tag">02</span>Repair is not ordered by construction</h3>
-        <p>
-          The strongest professional F2P rows are Qwen3.8-27B under Qwen Code
-          (<span class="num">45.3</span>) and Claude Code (<span class="num">44.9</span>), above every
-          closed-source row, where Claude Opus 5 leads at <span class="num">33.5</span>. Those same
-          rows sit twelfth and seventh on GEN.
-        </p>
-        <p>
-          It is not a family effect either: Qwen3.6-35B-A3B repairs at 8.6–10.7. Construction and
-          repair expose distinct capabilities.
-        </p>
-      </div>
-      <div class="card">
-        <h3><span class="tag">03</span>The model moves a score more than the scaffold</h3>
-        <p>
-          GPT-6 Astra and Claude Opus 5 lead GEN in both pools. Professional GEN spread across
-          scaffolds is <span class="num">2.0</span> points for Qwen3.8-27B and
-          <span class="num">3.0</span> for Qwen3.6-35B-A3B (5.5 and 5.1 on common), against a
-          <span class="num">14.8</span>-point professional gap between the two families.
-        </p>
-        <p>
-          Repair is the scaffold-sensitive half: professional F2P for Qwen3.8-27B ranges from 29.2 to
-          45.3 across harnesses.
-        </p>
-      </div>
-      <div class="card">
-        <h3><span class="tag">04</span>Category strength ≠ overall ranking</h3>
-        <p>
-          Across the 14 default-scaffold models, common category scores average
-          <span class="num">66.7</span> in Geospatial Construction and <span class="num">32.2</span> in
-          Manufacturing Agriculture; professional averages are <span class="num">71.5</span> in Supply
-          Operations and <span class="num">28.4</span> in Enterprise Operations.
-        </p>
-        <p>
-          Rankings reshuffle per category: MiniMax-M3 leads Enterprise Operations (39.75) ahead of
-          GPT-6 Astra (24.26), despite lower overall GEN (44.96 vs. 60.36).
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="analysis">
-  <div class="wrap">
-    <h2><span class="hash">#</span>Trajectory analysis</h2>
-    <p class="section-sub">
-      Every score marks the endpoint of a trajectory. Parsing a deduplicated archive of 1,619
-      trajectories lets us separate what the harness contributes from what the model does.
-    </p>
-
-    <figure>
-      <img src="assets/figures/codeworldbench_scaffold_trace_comparison.png"
-           alt="Scaffold comparison: role mix of tool calls, calls per run with variance, and error taxonomy for two Qwen models under Claude Code, OpenHands, and Qwen Code.">
-      <figcaption>
-        <b>Scaffold view.</b> Qwen3.8-27B (Q3.8) and Qwen3.6-35B-A3B (Q3.6) under Claude Code (CC),
-        OpenHands (OH), and Qwen Code (QC), over 118 environments in both settings. (a) Role mix, GEN
-        L3 left and SWE right. (b) Calls per run: bars means, whiskers one standard deviation, ticks
-        medians, triangles the longest run. (c) Error taxonomy, pooled over both settings.
-      </figcaption>
-    </figure>
-
-    <div class="cards">
-      <div class="card">
-        <h3>Tool mix is a property of the harness, not the model</h3>
-        <p>
-          Under Claude Code, both models spend <span class="num">54–68%</span> of GEN calls in shell
-          versus 2–4% on edits (edit-to-execution ratio ≈ 0.05); Qwen Code inverts this to
-          <span class="num">1.63</span> and <span class="num">1.71</span>, with OpenHands in between.
-          Leaderboards that mix scaffolds partly benchmark harnesses.
-        </p>
-      </div>
-      <div class="card">
-        <h3>Volume varies by scaffold at fixed capability</h3>
-        <p>
-          Mean GEN calls per run span <span class="num">93.3–174.2</span> — a 1.9× variance driven
-          solely by the harness, with individual runs hitting 500 calls. SWE requires more interaction
-          than GEN in four of six setups (ratio ≈ 1.4).
-        </p>
-      </div>
-      <div class="card">
-        <h3>Errors shift from own code to the tool interface</h3>
-        <p>
-          Under Claude Code, assertion failures in self-written probe scripts account for ~60% of
-          errors. Under OpenHands and Qwen Code, interface friction dominates. Absolute error rates
-          stay within <span class="num">2.1–7.0%</span>. Internal code failures lie on the path to
-          semantic correctness; tool misuse merely pads trace length.
-        </p>
-      </div>
-      <div class="card">
-        <h3>Difficulty rises with verified surface, not prompt length</h3>
-        <p>
-          Holding the scaffold fixed, macro-averaged pass rate drops
-          <span class="num">0.4580</span> (L1) → <span class="num">0.4370</span> (L2) →
-          <span class="num">0.4069</span> (L3) while verified surface roughly doubles at each step:
-          four times the behavior costs about five points. Failures are semantic, not structural —
-          stale counters, shallow success envelopes, inconsistent views.
-        </p>
-      </div>
-    </div>
-
-    <figure style="margin-top:2rem">
-      <img src="assets/figures/codeworldbench_cc_model_trace_comparison.png"
-           alt="Complete trace view across six model families: operation mix, operations per run, share of runs executing a check script or test runner, and error taxonomy as a share of failed outcomes.">
-      <figcaption>
-        <b>Complete trace view.</b> Two closed-source and four open-source models over the 50 common
-        environments, GEN L3 (left bar) and SWE (right bar). Operations are request-side actions,
-        outcomes harness-reported results, normalized so Codex and Claude Code are comparable.
-        (a) Operation mix. (b) Operations per run. (c) Runs executing a self-written check script
-        (solid) or a test runner (hatched). (d) Error taxonomy as a share of failed outcomes.
-      </figcaption>
-    </figure>
-
-    <div class="cards">
-      <div class="card">
-        <h3>Closed-source models act on the world; open-source models read about it</h3>
-        <p>
-          On GEN L3, closed-source models spend <span class="num">86%</span> of operations on
-          execution, 11% on edits, and 2% on reads; open-source models spend
-          <span class="num">23%</span> reading and 5% editing. Claude Opus 5 reads files in under 6% of
-          operations while Kimi K3 spends 36.5% of GEN reading, with a 3.45-point gap in common GEN.
-        </p>
-      </div>
-      <div class="card">
-        <h3>Repair costs more, and no one buys accuracy with turns</h3>
-        <p>
-          Claude Opus 5 finishes GEN in <span class="num">66.8</span> operations; Qwen3.8-27B needs
-          <span class="num">139.2</span> for a lower score. SWE carries a repair surcharge of 1.1–1.6×
-          in operations and cost ($5.64–$12.60 for GEN vs. $8.20–$18.77 for SWE).
-        </p>
-        <p>
-          In six of eight Claude Code cells the top volume quartile scores <em>below</em> the bottom
-          quartile — by up to 12.0 points on GEN and 9.7 on F2P. Long traces signal struggle.
-        </p>
-      </div>
-      <div class="card">
-        <h3>Only one model habitually runs a real test suite</h3>
-        <p>
-          GPT-6 Astra runs test suites in <span class="num">70%</span> of GEN and
-          <span class="num">96%</span> of SWE runs; other models do so in only
-          <span class="num">2.2%</span> of runs, and never for Claude Opus 5 or GLM-5.3 on GEN. Ad-hoc
-          scripts verify single runs but leave no reusable artifact, missing transition regressions
-          where an action returns success but writes invalid state.
-        </p>
-      </div>
-      <div class="card">
-        <h3>The two groups fail at different layers</h3>
-        <p>
-          Open-source failures stem mainly from self-written code (80% GEN, 73% SWE, vs. 10% and 14%
-          interface errors). For closed-source models under SWE, interface issues rise to
-          <span class="num">43%</span> while own-code errors fall to 24%. Failures stay shallow
-          (2.6–9.2% of outcomes, streaks averaging 1.0–2.7 calls): agents fail smoothly rather than
-          catastrophically.
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="downstream">
-  <div class="wrap">
-    <h2><span class="hash">#</span>Does construction quality reach a downstream agent?</h2>
-    <p class="section-sub">
-      Generated environments serve as substrates for downstream training and evaluation. We evaluate
-      387 reference-authored tasks across the 36 common GEN environments successfully built by three
-      generators, solved by a fixed downstream agent at temperature 0 with at most 30 tool calls.
-    </p>
-
-    <div class="table-scroll">
-      <table>
-        <caption class="skip-link">Downstream grounded pass rate and call success rate per generated environment, with and without a skill document.</caption>
-        <thead>
-          <tr>
-            <th class="left" scope="col">Environment</th>
-            <th colspan="2" class="group">Grounded pass ↑</th>
-            <th colspan="2" class="group">Call success ↑</th>
-            <th class="group">Never-ok tools ↓</th>
-            <th class="group">No-tool failures ↓</th>
-          </tr>
-          <tr>
-            <th class="left" scope="col"></th>
-            <th scope="col">w/o skill</th><th scope="col">w/ skill</th>
-            <th scope="col">w/o skill</th><th scope="col">w/ skill</th>
-            <th scope="col">w/o → w/</th>
-            <th scope="col">w/o → w/</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="left model">Reference environment</td>
-            <td class="metric best">49.6</td><td>—</td>
-            <td class="metric">78.0</td><td>—</td>
-            <td>6 → —</td><td>0 → —</td>
-          </tr>
-          <tr>
-            <td class="left model">Generated by GLM-5.2</td>
-            <td class="metric">24.8</td><td class="metric">25.3</td>
-            <td class="metric">58.2</td><td class="metric">67.2</td>
-            <td>8 → 7</td><td>5 → 0</td>
-          </tr>
-          <tr>
-            <td class="left model">Generated by Qwen3.6-27B</td>
-            <td class="metric">18.1</td><td class="metric">19.4</td>
-            <td class="metric">49.1</td><td class="metric">55.0</td>
-            <td>15 → 14</td><td>16 → 15</td>
-          </tr>
-          <tr>
-            <td class="left model">Generated by Qwen3.6-35B-A3B</td>
-            <td class="metric">6.2</td><td class="metric">7.0</td>
-            <td class="metric">26.8</td><td class="metric">36.8</td>
-            <td>54 → 45</td><td>33 → 29</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="cards" style="margin-top:1.5rem">
-      <div class="card">
-        <h3>Construction quality governs downstream transfer</h3>
-        <p>
-          The reference environment reaches <span class="num">49.6%</span> grounded pass; generated
-          environments retain only one-eighth to one-half of that (24.8, 18.1, 6.2), mirroring their
-          construction scores. Reference failures come almost entirely from task difficulty — all
-          required tools exist. Generated environments add defects that were never the task's fault:
-          missing tools cause up to <span class="num">33%</span> of task failures in the weakest
-          generator, which omits 332 tools and invents 203 of roughly 1,250 reference tools.
-        </p>
-      </div>
-      <div class="card">
-        <h3>Skills buy efficiency, not completion</h3>
-        <p>
-          A skill document raises call success and roughly halves budget exhaustion, but pass-rate
-          gains stay at or below <span class="num">1.3</span> points. High-quality environments benefit
-          disproportionately — a <span class="num">9×</span> larger call-success gain than the bottom
-          tercile. Documentation mitigates overhead; it cannot recover omitted tools. The environment
-          sets the ceiling, skills dictate how closely agents reach it.
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="run">
-  <div class="wrap">
-    <h2><span class="hash">#</span>Run the benchmark</h2>
-    <p class="section-sub">
-      Python 3.12. The agent CLI must already be on <code>PATH</code> — the benchmark launches it but
-      does not install it.
-    </p>
-
-    <div class="note">
-      Generated repositories execute untrusted model-written code with no container isolation. Run
-      only in a disposable environment with no sensitive credentials.
-    </div>
-
-    <ol class="steps">
-      <li>
-        <h3>Install</h3>
-        <p>Set a scratch directory on a disk with room to spare; generation workspaces are large.</p>
-<pre><code><span class="c"># in the CodeWorldBench repository root</span>
-pip install -e .
-<span class="k">export</span> CWB_TMP_ROOT=<span class="s">/path/to/scratch</span></code></pre>
-        <p>
-          <code>CWB_ROOT</code>, <code>CWB_DATA_ROOT</code>, and <code>CWB_WORK_ROOT</code> relocate
-          config, dataset, and working state.
-        </p>
-      </li>
-
-      <li>
-        <h3>Get the data</h3>
-        <p>
-          The dataset ships as two archives under <code>dataset/archives/</code>:
-          <code>sources.tar.gz</code> (the 118 environment workspaces) and
-          <code>eval_assets.tar.gz</code> (case bundles and SWE baselines). Extract both at the
-          repository root; each already contains its own top-level directory.
-        </p>
-<pre><code>tar -xzf dataset/archives/sources.tar.gz       <span class="c"># -&gt; sources/</span>
-tar -xzf dataset/archives/eval_assets.tar.gz  <span class="c"># -&gt; eval_assets/</span></code></pre>
-        <p>Expect roughly 1.2 GB unpacked. Verify first with <code>sha256sum -c SHA256SUMS</code>.</p>
-      </li>
-
-      <li>
-        <h3>Register a model</h3>
-<pre><code>printf <span class="s">'%s\n'</span> <span class="s">"$YOUR_API_KEY"</span> | cwb model \
-  --mode api \
-  --base-url <span class="s">https://your-endpoint/v1</span> \
-  --api-key-stdin \
-  --api-model <span class="s">YOUR_MODEL_NAME</span></code></pre>
-        <p>
-          Use <code>--mode api</code> for hosted OpenAI-compatible providers, <code>--mode vllm</code>
-          or <code>--mode sglang</code> for self-hosted ones. Credentials land in a gitignored
-          directory. Refer to the model by its registered name from here on.
-        </p>
-      </li>
-
-      <li>
-        <h3>Generate</h3>
-        <p>
-          Install the pinned scaffold version. Agent CLIs change their prompting and tool behavior
-          between releases, so scores are only comparable at a fixed version — the reported Claude
-          Code numbers use <strong>v2.1.251</strong>, and OpenAI models use Codex v0.154.0.
-        </p>
-<pre><code>npm install -g @anthropic-ai/claude-code@2.1.251
-
-cwb run --scaffolds cc --models <span class="s">YOUR_MODEL_NAME</span> --max-concurrent-settings 24</code></pre>
-        <p>
-          One model–scaffold pair over the full dataset schedules 236 tasks (118 environments × 2
-          settings). Add <code>--continue</code> to resume and retry failed work; narrow the scope with
-          <code>--env-id</code> and <code>--settings</code>. Eight scaffolds ship in
-          <code>config/scaffolds/</code>: <code>cc</code> (default), <code>openhands</code>,
-          <code>opencode</code>, <code>qwencode-bailian</code>, <code>zcode-official</code>,
-          <code>codex</code>, <code>kimi-code-cli</code>, <code>minimax-cli</code>.
-        </p>
-<pre><code>cwb status --models <span class="s">YOUR_MODEL_NAME</span>   <span class="c"># progress</span>
-cwb stop   --models <span class="s">YOUR_MODEL_NAME</span>   <span class="c"># stop a run</span></code></pre>
-      </li>
-
-      <li>
-        <h3>Evaluate</h3>
-<pre><code>cwb eval --scaffolds cc --models <span class="s">YOUR_MODEL_NAME</span> --settings GEN,SWE</code></pre>
-        <p>
-          Each generated workspace is graded in place by one pytest process per setting against the
-          canonical case bundle; the workspace database is restored afterwards. Results land under
-          <code>eval/results/</code> with a <code>measurement.json</code> summary, and leaderboards in
-          <code>reports/</code> carry per-domain and per-tier scores, GEN, P2P, F2P, and token totals.
-        </p>
-        <p>
-          Every run records digests of the source tree, evaluation assets, and case set, so a score
-          traces back to the exact inputs that produced it.
-        </p>
-      </li>
-    </ol>
-
-    <h3>Reading the scores</h3>
-    <p class="section-sub">
-      GEN and the category columns are <strong>macro</strong>-averages over environments; P2P and F2P
-      are <strong>micro</strong>-averages over cases. Mixing the two aggregations produces numbers that
-      look plausible and are not comparable to anything published here.
-    </p>
-  </div>
-</section>
-
-<section id="conclusion">
-  <div class="wrap">
-    <h2><span class="hash">#</span>Conclusion</h2>
-    <p class="section-sub" style="max-width:88ch">
-      By verifying persistent state alongside tool return values, CodeWorldBench exposes semantic
-      errors that standard code benchmarks overlook. The experiments reveal a capability gap: frontier
-      agents reliably preserve existing behavior, but struggle to synthesize correct state transitions
-      from scratch or repair semantic defects. Those defects propagate — agents operating inside
-      generated environments suffer performance drops from crashing, inconsistent, or missing tools.
-      Building stateful environments is an unsolved challenge, and closing it calls for coding agents
-      with rigorous state reasoning and automated self-verification.
-    </p>
-
-    <div class="cards">
-      <div class="card">
-        <h3>Supervise state rather than output</h3>
-        <p>
-          Return-value checks cannot express what these failures look like. Grading has to reach the
-          state an action induces.
-        </p>
-      </div>
-      <div class="card">
-        <h3>Require self-verification before submission</h3>
-        <p>
-          Agents already spend large execution budgets on file manipulation. Scaffolds that
-          systematically exercise tool interfaces can redirect that effort into early verification.
-        </p>
-      </div>
-      <div class="card">
-        <h3>Treat shared invariants as an artifact</h3>
-        <p>
-          Commit once to identifier policies, validation order, and derived-view update rules, then
-          implement each tool against that definition rather than re-deriving it per tool.
-        </p>
-      </div>
-    </div>
+    <p class="more"><a href="benchmark.html">Benchmark details →</a></p>
   </div>
 </section>
 
 <footer>
   <div class="wrap">
-    <p>CodeWorldBench — benchmark site. All figures and numbers come from the paper.</p>
+    <p>Figures and numbers are taken from the paper.</p>
     <p>Apache License 2.0.</p>
   </div>
 </footer>

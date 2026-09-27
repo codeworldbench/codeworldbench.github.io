@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Benchmark — CodeWorldBench</title>
+<meta name="description" content="How CodeWorldBench is built: the world formalism, behavioral equivalence grading, the GEN and SWE settings, and the twenty domains across 118 environments.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#formulation">Skip to content</a>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="./"><span class="prompt">$</span>CodeWorldBench</a>
+    <div class="nav-links">
+      <a href="./">Leaderboard</a>
+      <a href="benchmark.html" aria-current="page">Benchmark</a>
+      <a href="results.html">Results</a>
+      <a href="analysis.html">Analysis</a>
+      <a href="run.html">Run it</a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">Benchmark</p>
+    <h1>118 environments, graded on state</h1>
+    <p class="tagline">
+      Existing benchmarks tie correctness to APIs, unit tests, or patches over existing code.
+      CodeWorldBench asks how faithfully an agent-built environment reproduces the state dynamics its
+      specification prescribes.
+    </p>
+    <div class="stats">
+      <div class="stat"><span class="n">118</span><span class="k">Environments</span></div>
+      <div class="stat"><span class="n">25,015</span><span class="k">Hidden cases</span></div>
+      <div class="stat"><span class="n">4,417</span><span class="k">Tools</span></div>
+      <div class="stat"><span class="n">9,753</span><span class="k">P2P cases</span></div>
+      <div class="stat"><span class="n">15,262</span><span class="k">F2P cases</span></div>
+    </div>
+  </div>
+</header>
+
+<section id="formulation" class="flush">
+  <div class="wrap">
+    <h2><span class="hash">#</span>Task formulation</h2>
+    <p class="section-sub">
+      A code world is <code>W = (D, S, T, V)</code>: seed database, runtime state space, tool set, and
+      hidden verification rules. Tools split into read-only query tools and state-mutating tools. Each
+      setting exposes a tool subset and hidden cases of the form (tool, arguments).
+    </p>
+    <div class="cards">
+      <div class="card">
+        <h3>Same seed, same calls</h3>
+        <p>
+          Reference and submission both initialize from <code>s₀ = Init(D)</code>, then receive
+          identical hidden tool calls. Nothing about the comparison depends on how the code is
+          written.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Output and state must both match</h3>
+        <p>
+          A case passes only if the returned value matches <em>and</em>, for mutating tools, the
+          resulting state matches the reference on every field designated by <code>V</code>.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Behavioral equivalence, not code similarity</h3>
+        <p>
+          Between 2.2% and 3.0% of state checks require a field to be <em>absent</em> — a condition no
+          return-value check can express.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="settings">
+  <div class="wrap">
+    <h2><span class="hash">#</span>Two settings, one base environment</h2>
+    <p class="section-sub">
+      Each environment yields both settings from the same base. They are reported side by side, never
+      averaged.
+    </p>
+    <div class="two-col">
+      <div>
+        <h3>GEN — world construction</h3>
+        <p class="body">
+          The agent implements the code world from scratch in a workspace containing initial data and
+          tool documentation, with contracts specifying entities, tool surfaces, and behavior. Hidden
+          tests execute against reset seed states across three nested slices: L1 (easiest 25%), L2
+          (easiest 50%), and L3 (the full surface, reported everywhere on this site).
+        </p>
+      </div>
+      <div>
+        <h3>SWE — semantic repair</h3>
+        <p class="body">
+          Semantic repair on runnable but defective repositories, where the defects arose during
+          generation. Tool surfaces and seed states are preserved, and verification artifacts withheld
+          to prevent leakage. Fail-to-pass and pass-to-pass rates are reported separately, decoupling
+          bug fixes from regression avoidance.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="construction">
+  <div class="wrap">
+    <h2><span class="hash">#</span>How the environments were built</h2>
+    <p class="section-sub">
+      Reference worlds are built under human-authored contracts with execution-based admission. A
+      world enters the benchmark only after every tool passes its checks.
+    </p>
+    <ol class="steps steps-tight">
+      <li>
+        <h3>Category selection</h3>
+        <p>
+          Candidate stateful domains are organized into common and professional taxonomies, retaining
+          environments that require coordination across records or tools with output–state
+          verification, and filtering out static lookups and single-function tasks.
+        </p>
+      </li>
+      <li>
+        <h3>Environment definition</h3>
+        <p>
+          Each category is governed by a contract covering overview, entity set, data scale, state
+          schema, tool suite, tier assignment, validation rules, examples, and seed specification. For
+          every tool the contract details arguments, validation order, error conditions, mutations,
+          and cross-entity side effects.
+        </p>
+      </li>
+      <li>
+        <h3>Seed-state construction</h3>
+        <p>
+          The generator enforces foreign-key, temporal, and status relationships, so the seed state
+          supports queries, pagination, conflicts, and state transitions across both success and
+          failure branches.
+        </p>
+      </li>
+      <li>
+        <h3>Executable generation</h3>
+        <p>
+          Shared state management, tool implementations, executable tests, and behavioral notes are
+          generated together so validation logic, error branches, and event mutations agree.
+          Environments register all tools as an MCP server and bundle verification suites for state
+          and events.
+        </p>
+      </li>
+      <li>
+        <h3>Quality filtering and final verification</h3>
+        <p>
+          Query tools are audited for filtering, pagination, and invalid inputs; stateful tools for
+          preconditions, idempotency, conflicts, and side effects. Two rounds of post-generation
+          validation repair implementations and test cases. Ambiguous or weakly covered worlds are
+          repaired or discarded.
+        </p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section id="profile">
+  <div class="wrap">
+    <h2><span class="hash">#</span>Static profile</h2>
+    <p class="section-sub">
+      118 environments with 4,417 tools — 32.9 per common environment and 40.8 per professional one —
+      and 25,015 hidden cases (14,069 common, 10,946 professional). State representations span static
+      tables, complex configurations, and event-driven databases. A common environment documents 69.9
+      distinct error identifiers across its 32.9 tools.
+    </p>
+    <figure>
+      <img src="assets/figures/codeworldbench_category_distribution_1x4.png"
+           alt="Static profile of CodeWorldBench: category distribution as nested rings for the common and professional subsets, plus distributions of tool-surface size, interface arity, and hidden-test depth for each subset.">
+      <figcaption>
+        <b>Static profile.</b> (a) Category distribution — inner ring common, outer professional.
+        (b)–(d) Tool-surface size, interface arity, and hidden-test depth per subset.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="categories">
+  <div class="wrap">
+    <h2><span class="hash">#</span>Domains</h2>
+    <p class="section-sub">
+      Twenty domains, ten per subset. These codes are the category column headers in the
+      <a href="results.html">result tables</a>.
+    </p>
+
+    <h3>Common · 50 environments</h3>
+    <div class="cat-grid">
+      <div class="cat-cell"><span class="code">CC</span><span class="name">Communication Collaboration</span></div>
+      <div class="cat-cell"><span class="code">ME</span><span class="name">Media Entertainment</span></div>
+      <div class="cat-cell"><span class="code">DI</span><span class="name">Data Intelligence</span></div>
+      <div class="cat-cell"><span class="code">ID</span><span class="name">Infrastructure Development</span></div>
+      <div class="cat-cell"><span class="code">FC</span><span class="name">Financial Compliance</span></div>
+      <div class="cat-cell"><span class="code">CL</span><span class="name">Commerce Logistics</span></div>
+      <div class="cat-cell"><span class="code">PS</span><span class="name">Public Service</span></div>
+      <div class="cat-cell"><span class="code">GC</span><span class="name">Geospatial Construction</span></div>
+      <div class="cat-cell"><span class="code">MA</span><span class="name">Manufacturing Agriculture</span></div>
+      <div class="cat-cell"><span class="code">EI</span><span class="name">Embodied Intelligence</span></div>
+    </div>
+
+    <h3>Professional · 68 environments</h3>
+    <div class="cat-grid">
+      <div class="cat-cell"><span class="code">ES</span><span class="name">Engineering Systems</span></div>
+      <div class="cat-cell"><span class="code">EB</span><span class="name">Embedded Systems</span></div>
+      <div class="cat-cell"><span class="code">SC</span><span class="name">Scientific Computing</span></div>
+      <div class="cat-cell"><span class="code">CM</span><span class="name">Creative Media</span></div>
+      <div class="cat-cell"><span class="code">EO</span><span class="name">Enterprise Operations</span></div>
+      <div class="cat-cell"><span class="code">FS</span><span class="name">Financial Services</span></div>
+      <div class="cat-cell"><span class="code">CP</span><span class="name">Commercial Platforms</span></div>
+      <div class="cat-cell"><span class="code">SO</span><span class="name">Supply Operations</span></div>
+      <div class="cat-cell"><span class="code">LG</span><span class="name">Legal Governance</span></div>
+      <div class="cat-cell"><span class="code">HE</span><span class="name">Health Education</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="next">
+  <div class="wrap">
+    <div class="next-row">
+      <a class="btn btn-primary" href="results.html">Full result tables</a>
+      <a class="btn" href="analysis.html">Trajectory analysis</a>
+      <a class="btn" href="run.html">Run the benchmark</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Figures and numbers are taken from the paper.</p>
+    <p>Apache License 2.0.</p>
+  </div>
+</footer>
+</body>
+</html>

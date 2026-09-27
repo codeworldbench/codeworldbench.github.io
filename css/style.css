@@ -164,6 +164,42 @@ code {
   border-bottom: 1px solid var(--line);
 }
 
+/* The home hero sits directly above the leaderboard, so it stays short. */
+.hero-tight {
+  padding-bottom: 2rem;
+}
+
+/* Sub-page header: same type scale as the hero, without the blinking cursor. */
+.page-head {
+  padding: clamp(2rem, 5vw, 3.2rem) 0 2rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.page-head h1 {
+  font-size: clamp(1.7rem, 4vw, 2.5rem);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  margin: 0 0 0.7rem;
+  font-weight: 700;
+}
+
+.page-head .tagline {
+  font-size: clamp(0.95rem, 1.8vw, 1.08rem);
+  color: var(--fg-dim);
+  max-width: 76ch;
+  margin: 0 0 1.4rem;
+}
+
+.page-head .stats,
+.page-head .note {
+  margin-bottom: 0;
+}
+
+/* A section that follows a header already carrying a rule needs less top space. */
+section.flush {
+  padding-top: clamp(1.8rem, 4vw, 2.6rem);
+}
+
 .eyebrow {
   font-size: 0.78rem;
   letter-spacing: 0.16em;
@@ -370,10 +406,11 @@ figure figcaption b {
 }
 
 .card h3 .tag {
-  color: var(--fg-faint);
-  font-weight: 400;
-  font-size: 0.78rem;
-  margin-right: 0.45rem;
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  margin-right: 0.5rem;
 }
 
 .card p {
@@ -393,12 +430,44 @@ figure figcaption b {
 
 /* ---------- leaderboard ---------- */
 
+/* Heading and table controls share a baseline row on wide screens and stack on
+   narrow ones. */
+.lb-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
+  flex-wrap: wrap;
+}
+
+.lb-head > h2 {
+  font-size: 1.35rem;
+  letter-spacing: -0.02em;
+  margin: 0;
+  font-weight: 700;
+}
+
+.lb-head > h2 .hash {
+  color: var(--accent);
+  margin-right: 0.5rem;
+}
+
 .lb-controls {
   display: flex;
   align-items: center;
   gap: 1.2rem;
   flex-wrap: wrap;
   margin-bottom: 1rem;
+}
+
+.lb-head .lb-controls {
+  margin-bottom: 0;
+}
+
+.lb-error {
+  padding: 1rem;
+  margin: 0;
+  color: var(--fg-dim);
 }
 
 .toggle {
@@ -611,11 +680,99 @@ td.best {
   font-size: 0.78rem;
   color: var(--fg-faint);
   line-height: 1.7;
+  max-width: 100ch;
 }
 
 .legend b {
   color: var(--fg-dim);
   font-weight: 600;
+}
+
+/* ---------- overall table: fewer, wider columns ---------- */
+
+.lb-wide {
+  font-size: 0.86rem;
+}
+
+.lb-wide thead th {
+  padding: 0.55rem 0.5rem;
+}
+
+.lb-wide tbody td {
+  padding: 0.5rem;
+}
+
+/* The GEN column carries a proportional bar behind the value, so the ranking
+   reads without comparing digits. Width comes from --w, set per row in JS. */
+th.big,
+td.big {
+  width: 34%;
+  min-width: 170px;
+}
+
+td.big {
+  position: relative;
+}
+
+td.big .bar {
+  display: block;
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 1.15rem;
+  width: var(--w, 0%);
+  background: linear-gradient(90deg, rgba(74, 222, 128, 0.32), rgba(74, 222, 128, 0.12));
+  border-left: 2px solid var(--accent);
+  border-radius: 0 2px 2px 0;
+}
+
+td.big .barval {
+  position: relative;
+  padding-right: 0.15rem;
+}
+
+td.metric.sub {
+  color: var(--fg-dim);
+  font-weight: 400;
+}
+
+td.dash {
+  color: var(--fg-faint);
+}
+
+.more {
+  margin: 1.4rem 0 0;
+  font-size: 0.89rem;
+}
+
+.next-row {
+  display: flex;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+
+.cards-3 {
+  grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
+}
+
+.section-sub.wide {
+  max-width: 94ch;
+}
+
+p.body {
+  color: var(--fg-dim);
+  font-size: 0.92rem;
+  margin: 0 0 1rem;
+}
+
+.steps-tight > li {
+  margin-bottom: 1.2rem;
+}
+
+.nav-links a[aria-current="page"] {
+  color: var(--accent);
 }
 
 /* ---------- code blocks ---------- */

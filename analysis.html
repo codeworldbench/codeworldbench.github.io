@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Analysis — CodeWorldBench</title>
+<meta name="description" content="Trajectory analysis of coding agents on CodeWorldBench: how the scaffold shapes behavior, how agents spend their turns, where failures land, and whether construction quality reaches a downstream agent.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#scaffold">Skip to content</a>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="./"><span class="prompt">$</span>CodeWorldBench</a>
+    <div class="nav-links">
+      <a href="./">Leaderboard</a>
+      <a href="benchmark.html">Benchmark</a>
+      <a href="results.html">Results</a>
+      <a href="analysis.html" aria-current="page">Analysis</a>
+      <a href="run.html">Run it</a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">Analysis</p>
+    <h1>Every score is the end of a trajectory</h1>
+    <p class="tagline">
+      A deduplicated archive of 1,619 trajectories lets us separate what the harness contributes from
+      what the model does — and see which failures actually lie on the path to correctness.
+    </p>
+  </div>
+</header>
+
+<section id="difficulty" class="flush">
+  <div class="wrap">
+    <h2><span class="hash">#</span>Difficulty rises with verified surface</h2>
+    <p class="section-sub">
+      Holding the scaffold fixed across the three GEN levels on the 50 common environments,
+      macro-averaged pass rate drops <span class="num">0.4580</span> (L1) →
+      <span class="num">0.4370</span> (L2) → <span class="num">0.4069</span> (L3) while verified
+      surface roughly doubles at each step. Four times the behavior costs about five points.
+    </p>
+    <p class="section-sub">
+      The decline comes from stateful coupling, not prompt length: higher levels demand sharing
+      records, maintaining derived views, and coordinating side effects across calls. Crucially the
+      failures are semantic rather than structural. Generated repositories pass structural setup but
+      mismanage state transitions — stale counters, shallow success envelopes, inconsistent views —
+      because agents build first, writing managers and registries before validating transition rules.
+      More code does not help, and the strongest run writes less. Because all 50 environments score
+      strictly between zero and one at every level, the slices work as diagnostics rather than
+      difficulty gates.
+    </p>
+  </div>
+</section>
+
+<section id="scaffold">
+  <div class="wrap">
+    <h2><span class="hash">#</span>The scaffold shapes behavior more than the model</h2>
+    <p class="section-sub">
+      Holding two models fixed and varying the harness across all 118 environments. Because scaffolds
+      define turns differently, interaction is measured in tool calls.
+    </p>
+
+    <figure>
+      <img src="assets/figures/codeworldbench_scaffold_trace_comparison.png"
+           alt="Scaffold comparison: role mix of tool calls, calls per run with variance, and error taxonomy for two Qwen models under Claude Code, OpenHands, and Qwen Code.">
+      <figcaption>
+        <b>Scaffold view.</b> Qwen3.8-27B (Q3.8) and Qwen3.6-35B-A3B (Q3.6) under Claude Code (CC),
+        OpenHands (OH), and Qwen Code (QC), over 118 environments in both settings. (a) Role mix, GEN
+        L3 left and SWE right. (b) Calls per run: bars means, whiskers one standard deviation, ticks
+        medians, triangles the longest run. (c) Error taxonomy, pooled over both settings.
+      </figcaption>
+    </figure>
+
+    <div class="cards">
+      <div class="card">
+        <h3>Tool mix is a property of the harness</h3>
+        <p>
+          Under Claude Code both models spend <span class="num">54–68%</span> of GEN calls in shell
+          versus 2–4% on edits, an edit-to-execution ratio around 0.05. Qwen Code inverts this to
+          <span class="num">1.63</span> and <span class="num">1.71</span>, with OpenHands in between.
+          Leaderboards that mix scaffolds partly benchmark harnesses.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Volume varies at fixed capability</h3>
+        <p>
+          Mean GEN calls per run span <span class="num">93.3–174.2</span>, a 1.9× variance driven
+          solely by the harness, with individual runs hitting 500 calls. SWE requires more interaction
+          than GEN in four of six setups (ratio ≈ 1.4); the exceptions are reading-heavy Qwen Code
+          runs that prepay comprehension costs.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Errors move to the tool interface</h3>
+        <p>
+          Under Claude Code, assertion failures in self-written probe scripts account for about 60% of
+          errors. Under OpenHands and Qwen Code, interface friction — tool misuse, missing paths —
+          dominates. Absolute error rates stay within <span class="num">2.1–7.0%</span>. Internal code
+          failures lie on the path to semantic correctness; tool misuse merely pads trace length.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="turns">
+  <div class="wrap">
+    <h2><span class="hash">#</span>How agents spend their turns</h2>
+    <p class="section-sub">
+      600 traces from six families across the 50 common environments in GEN L3 and SWE: two
+      closed-source models and four open-source ones. Actions are normalized to <em>operations</em> and
+      harness results to <em>outcomes</em>, so Codex and Claude Code are comparable. Claude Opus 5
+      shares the open-source harness, which isolates model effects from harness effects.
+    </p>
+
+    <figure>
+      <img src="assets/figures/codeworldbench_cc_model_trace_comparison.png"
+           alt="Complete trace view across six model families: operation mix, operations per run, share of runs executing a check script or test runner, and error taxonomy as a share of failed outcomes.">
+      <figcaption>
+        <b>Complete trace view.</b> Two closed-source and four open-source models over the 50 common
+        environments, GEN L3 (left bar) and SWE (right bar). (a) Operation mix. (b) Operations per run.
+        (c) Runs executing a self-written check script (solid) or a test runner (hatched). (d) Error
+        taxonomy as a share of failed outcomes.
+      </figcaption>
+    </figure>
+
+    <div class="cards">
+      <div class="card">
+        <h3>Closed-source models act on the world; open-source models read about it</h3>
+        <p>
+          On GEN L3, closed-source models spend <span class="num">86%</span> of operations on
+          execution, 11% on edits, 2% on reads; open-source models spend <span class="num">23%</span>
+          reading and 5% editing. Claude Opus 5 reads files in under 6% of operations while Kimi K3
+          spends 36.5% of GEN reading, with a 3.45-point gap in common GEN. One verifies by executing,
+          the other by inspecting. Under SWE, edit share rises to 7.3–14.5% as targeted modification
+          replaces probing.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Repair costs more, and no one buys accuracy with turns</h3>
+        <p>
+          Claude Opus 5 finishes GEN in <span class="num">66.8</span> operations; Qwen3.8-27B needs
+          <span class="num">139.2</span> for a lower score. SWE carries a repair surcharge of 1.1–1.6×
+          in operations and cost ($5.64–$12.60 GEN vs. $8.20–$18.77 SWE) — maintaining invariants means
+          reverse-engineering them first. In six of eight Claude Code cells the top volume quartile
+          scores <em>below</em> the bottom quartile, by up to 12.0 points on GEN and 9.7 on F2P. Long
+          traces signal struggle, not thoroughness.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Only one model habitually runs a real test suite</h3>
+        <p>
+          GPT-6 Astra runs test suites in <span class="num">70%</span> of GEN and
+          <span class="num">96%</span> of SWE runs. Other models do so in only
+          <span class="num">2.2%</span> of runs, and never for Claude Opus 5 or GLM-5.3 on GEN. Ad-hoc
+          scripts verify a single run and leave no reusable artifact, so they miss exactly the
+          regressions that matter: an action returns success while writing invalid state.
+        </p>
+      </div>
+      <div class="card">
+        <h3>The two groups fail at different layers</h3>
+        <p>
+          Open-source failures come mainly from self-written code (80% GEN, 73% SWE, against 10% and
+          14% interface errors). For closed-source models under SWE, interface issues rise to
+          <span class="num">43%</span> while own-code errors fall to 24%, with GPT-6 Astra timing out
+          on 25% of failed SWE calls due to full test runs. Failures stay shallow — 2.6–9.2% of
+          outcomes, streaks averaging 1.0–2.7 calls — and correlate weakly with score: agents fail
+          smoothly rather than catastrophically.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="downstream">
+  <div class="wrap">
+    <h2><span class="hash">#</span>Does construction quality reach a downstream agent?</h2>
+    <p class="section-sub">
+      Generated environments serve as substrates for downstream training and evaluation. 387
+      reference-authored tasks across the 36 common GEN environments successfully built by three
+      generators, solved by a fixed downstream agent at temperature 0 with at most 30 tool calls, each
+      environment tested with and without a skill document.
+    </p>
+
+    <div class="table-scroll">
+      <table>
+        <caption class="skip-link">Downstream grounded pass rate and call success rate per generated environment, with and without a skill document.</caption>
+        <thead>
+          <tr>
+            <th class="left" scope="col">Environment</th>
+            <th colspan="2" class="group">Grounded pass ↑</th>
+            <th colspan="2" class="group">Call success ↑</th>
+            <th class="group">Never-ok tools ↓</th>
+            <th class="group">No-tool failures ↓</th>
+          </tr>
+          <tr>
+            <th class="left" scope="col"></th>
+            <th scope="col">w/o skill</th><th scope="col">w/ skill</th>
+            <th scope="col">w/o skill</th><th scope="col">w/ skill</th>
+            <th scope="col">w/o → w/</th>
+            <th scope="col">w/o → w/</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="left model">Reference environment</td>
+            <td class="metric best">49.6</td><td class="dash">—</td>
+            <td class="metric">78.0</td><td class="dash">—</td>
+            <td>6 → —</td><td>0 → —</td>
+          </tr>
+          <tr>
+            <td class="left model">Generated by GLM-5.2</td>
+            <td class="metric">24.8</td><td class="metric">25.3</td>
+            <td class="metric">58.2</td><td class="metric">67.2</td>
+            <td>8 → 7</td><td>5 → 0</td>
+          </tr>
+          <tr>
+            <td class="left model">Generated by Qwen3.6-27B</td>
+            <td class="metric">18.1</td><td class="metric">19.4</td>
+            <td class="metric">49.1</td><td class="metric">55.0</td>
+            <td>15 → 14</td><td>16 → 15</td>
+          </tr>
+          <tr>
+            <td class="left model">Generated by Qwen3.6-35B-A3B</td>
+            <td class="metric">6.2</td><td class="metric">7.0</td>
+            <td class="metric">26.8</td><td class="metric">36.8</td>
+            <td>54 → 45</td><td>33 → 29</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="cards" style="margin-top:1.5rem">
+      <div class="card">
+        <h3>Construction quality governs downstream transfer</h3>
+        <p>
+          The reference environment reaches <span class="num">49.6%</span> grounded pass; generated
+          environments retain only one-eighth to one-half of that (24.8, 18.1, 6.2), mirroring their
+          construction scores. Reference failures come almost entirely from task difficulty — every
+          required tool exists. Generated environments add defects that were never the task's fault:
+          missing tools cause up to <span class="num">33%</span> of task failures in the weakest
+          generator, which omits 332 tools and invents 203 of roughly 1,250 reference tools.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Skills buy efficiency, not completion</h3>
+        <p>
+          A skill document raises call success and roughly halves budget exhaustion, but pass-rate
+          gains stay at or below <span class="num">1.3</span> points. High-quality environments benefit
+          disproportionately — a <span class="num">9×</span> larger call-success gain than the bottom
+          tercile. Documentation mitigates overhead; it cannot recover omitted tools. The environment
+          sets the ceiling, and skills decide how closely agents reach it.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="implications">
+  <div class="wrap">
+    <h2><span class="hash">#</span>Where this points</h2>
+    <p class="section-sub">
+      Three targets follow from where the failures land, none of them requiring a change to the
+      underlying model.
+    </p>
+    <div class="cards cards-3">
+      <div class="card">
+        <h3>Supervise state rather than output</h3>
+        <p>
+          Return-value checks cannot express what these failures look like. Grading has to reach the
+          state an action induces.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Require self-verification before submission</h3>
+        <p>
+          Agents already commit large execution budgets to iterative file manipulation. Scaffolds that
+          systematically exercise tool interfaces and verify persistent state can channel that effort
+          into early verification.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Treat shared invariants as an artifact</h3>
+        <p>
+          Commit once to identifier policies, validation order, and derived-view update rules, then
+          implement each tool against that definition instead of re-deriving it per tool.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="conclusion">
+  <div class="wrap">
+    <h2><span class="hash">#</span>Conclusion</h2>
+    <p class="section-sub wide">
+      By verifying persistent state alongside tool return values, CodeWorldBench exposes semantic
+      errors that standard code benchmarks overlook. Frontier agents reliably preserve existing
+      behavior, but struggle to synthesize correct state transitions from scratch or repair semantic
+      defects. Those defects propagate: agents operating inside generated environments suffer
+      performance drops from crashing, inconsistent, or missing tools. Building stateful environments
+      is an unsolved challenge, and closing it calls for coding agents with rigorous state reasoning
+      and automated self-verification.
+    </p>
+    <div class="next-row">
+      <a class="btn btn-primary" href="results.html">Full result tables</a>
+      <a class="btn" href="run.html">Run the benchmark</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Figures and numbers are taken from the paper.</p>
+    <p>Apache License 2.0.</p>
+  </div>
+</footer>
+</body>
+</html>
