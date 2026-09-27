@@ -100,7 +100,31 @@
     "source": "closed",
     "genCommon": 57.59,
     "genProfessional": 56.37,
-    "gen": 56.88694915254237
+    "gen": 56.88694915254237,
+    "categoriesCommon": {
+     "CC": 57.97,
+     "ME": 40.78,
+     "DI": 70.09,
+     "ID": 50.51,
+     "FC": 41.69,
+     "CL": 62.92,
+     "PS": 49.41,
+     "GC": 68.73,
+     "MA": 34.38,
+     "EI": 72.16
+    },
+    "categoriesProfessional": {
+     "ES": 68.5,
+     "EB": 68.64,
+     "SC": 54.13,
+     "CM": 47.61,
+     "EO": 30.18,
+     "FS": 51.77,
+     "CP": 68.48,
+     "SO": 67.06,
+     "LG": 38.91,
+     "HE": 56.03
+    }
    },
    {
     "provider": "OpenAI",
@@ -111,7 +135,31 @@
     "source": "closed",
     "genCommon": 55.75,
     "genProfessional": 50.81,
-    "gen": 52.90322033898305
+    "gen": 52.90322033898305,
+    "categoriesCommon": {
+     "CC": 57.97,
+     "ME": 42.31,
+     "DI": 60.37,
+     "ID": 53.86,
+     "FC": 45.53,
+     "CL": 60.55,
+     "PS": 50.77,
+     "GC": 62.89,
+     "MA": 33.75,
+     "EI": 67.22
+    },
+    "categoriesProfessional": {
+     "ES": 45.22,
+     "EB": 65.17,
+     "SC": 53.4,
+     "CM": 42.14,
+     "EO": 29.45,
+     "FS": 58.29,
+     "CP": 62.43,
+     "SO": 60.56,
+     "LG": 35.18,
+     "HE": 53.99
+    }
    },
    {
     "provider": "OpenAI",
@@ -122,7 +170,31 @@
     "source": "closed",
     "genCommon": 56.69,
     "genProfessional": 54.81,
-    "gen": 55.606610169491525
+    "gen": 55.606610169491525,
+    "categoriesCommon": {
+     "CC": 55.92,
+     "ME": 39.15,
+     "DI": 60.47,
+     "ID": 56.88,
+     "FC": 43.46,
+     "CL": 60.82,
+     "PS": 52.66,
+     "GC": 71.56,
+     "MA": 33.66,
+     "EI": 71.98
+    },
+    "categoriesProfessional": {
+     "ES": 72.18,
+     "EB": 53.7,
+     "SC": 41.92,
+     "CM": 46.9,
+     "EO": 22.63,
+     "FS": 61.2,
+     "CP": 68.28,
+     "SO": 67.42,
+     "LG": 39.73,
+     "HE": 55.62
+    }
    },
    {
     "provider": "OpenAI",
@@ -133,7 +205,31 @@
     "source": "closed",
     "genCommon": 58.13,
     "genProfessional": 60.36,
-    "gen": 59.415084745762705
+    "gen": 59.415084745762705,
+    "categoriesCommon": {
+     "CC": 66.17,
+     "ME": 42.13,
+     "DI": 63.6,
+     "ID": 56.45,
+     "FC": 53.99,
+     "CL": 62.74,
+     "PS": 57.43,
+     "GC": 79.3,
+     "MA": 34.47,
+     "EI": 69.05
+    },
+    "categoriesProfessional": {
+     "ES": 77.17,
+     "EB": 52.68,
+     "SC": 47.68,
+     "CM": 57.03,
+     "EO": 24.26,
+     "FS": 68.15,
+     "CP": 77.03,
+     "SO": 82.05,
+     "LG": 39.7,
+     "HE": 56.44
+    }
    },
    {
     "provider": "Anthropic",
@@ -144,7 +240,31 @@
     "source": "closed",
     "genCommon": 58.35,
     "genProfessional": 59.09,
-    "gen": 58.77644067796611
+    "gen": 58.77644067796611,
+    "categoriesCommon": {
+     "CC": 67.2,
+     "ME": 39.78,
+     "DI": 61.63,
+     "ID": 55.94,
+     "FC": 47.35,
+     "CL": 57.08,
+     "PS": 63.01,
+     "GC": 77.49,
+     "MA": 34.47,
+     "EI": 72.53
+    },
+    "categoriesProfessional": {
+     "ES": 68.44,
+     "EB": 56.28,
+     "SC": 36.07,
+     "CM": 56.34,
+     "EO": 32.19,
+     "FS": 63.76,
+     "CP": 91.61,
+     "SO": 74.34,
+     "LG": 40.03,
+     "HE": 64.59
+    }
    },
    {
     "provider": "ByteDance",
@@ -155,7 +275,31 @@
     "source": "closed",
     "genCommon": 47.46,
     "genProfessional": 52.03,
-    "gen": 50.0935593220339
+    "gen": 50.0935593220339,
+    "categoriesCommon": {
+     "CC": 53.25,
+     "ME": 36.62,
+     "DI": 45.72,
+     "ID": 48.51,
+     "FC": 38.1,
+     "CL": 39.09,
+     "PS": 36.36,
+     "GC": 47.08,
+     "MA": 33.03,
+     "EI": 66.67
+    },
+    "categoriesProfessional": {
+     "ES": 54.9,
+     "EB": 47.31,
+     "SC": 51.82,
+     "CM": 50.89,
+     "EO": 20.33,
+     "FS": 55.19,
+     "CP": 62.45,
+     "SO": 81.81,
+     "LG": 39.89,
+     "HE": 53.59
+    }
    },
    {
     "provider": "Alibaba",
@@ -166,7 +310,31 @@
     "source": "open",
     "genCommon": 51.32,
     "genProfessional": 55.12,
-    "gen": 53.50983050847457
+    "gen": 53.50983050847457,
+    "categoriesCommon": {
+     "CC": 54.95,
+     "ME": 36.71,
+     "DI": 59.32,
+     "ID": 51.91,
+     "FC": 40.35,
+     "CL": 55.71,
+     "PS": 45.36,
+     "GC": 60.57,
+     "MA": 33.48,
+     "EI": 65.93
+    },
+    "categoriesProfessional": {
+     "ES": 61.67,
+     "EB": 56.36,
+     "SC": 50.44,
+     "CM": 42.88,
+     "EO": 32.84,
+     "FS": 55.14,
+     "CP": 70.26,
+     "SO": 81.66,
+     "LG": 35.71,
+     "HE": 55.84
+    }
    },
    {
     "provider": "Alibaba",
@@ -177,7 +345,31 @@
     "source": "open",
     "genCommon": 55.42,
     "genProfessional": 53.59,
-    "gen": 54.36542372881357
+    "gen": 54.36542372881357,
+    "categoriesCommon": {
+     "CC": 63.66,
+     "ME": 39.6,
+     "DI": 58.76,
+     "ID": 55.05,
+     "FC": 44.19,
+     "CL": 54.79,
+     "PS": 51.94,
+     "GC": 73.54,
+     "MA": 33.48,
+     "EI": 67.4
+    },
+    "categoriesProfessional": {
+     "ES": 55.86,
+     "EB": 71.41,
+     "SC": 53.52,
+     "CM": 45.89,
+     "EO": 31.35,
+     "FS": 51.88,
+     "CP": 71.07,
+     "SO": 57.1,
+     "LG": 37.17,
+     "HE": 56.04
+    }
    },
    {
     "provider": "Alibaba",
@@ -188,7 +380,31 @@
     "source": "open",
     "genCommon": 52.28,
     "genProfessional": 53.92,
-    "gen": 53.22508474576271
+    "gen": 53.22508474576271,
+    "categoriesCommon": {
+     "CC": 54.54,
+     "ME": 37.25,
+     "DI": 58.96,
+     "ID": 54.46,
+     "FC": 44.0,
+     "CL": 50.96,
+     "PS": 49.32,
+     "GC": 60.82,
+     "MA": 33.75,
+     "EI": 66.48
+    },
+    "categoriesProfessional": {
+     "ES": 66.52,
+     "EB": 81.25,
+     "SC": 52.73,
+     "CM": 30.59,
+     "EO": 31.26,
+     "FS": 44.52,
+     "CP": 68.78,
+     "SO": 57.79,
+     "LG": 38.79,
+     "HE": 56.03
+    }
    },
    {
     "provider": "Alibaba",
@@ -199,7 +415,31 @@
     "source": "open",
     "genCommon": 49.89,
     "genProfessional": 53.11,
-    "gen": 51.74559322033898
+    "gen": 51.74559322033898,
+    "categoriesCommon": {
+     "CC": 55.0,
+     "ME": 34.63,
+     "DI": 54.38,
+     "ID": 51.4,
+     "FC": 39.62,
+     "CL": 52.24,
+     "PS": 42.21,
+     "GC": 67.96,
+     "MA": 34.2,
+     "EI": 66.85
+    },
+    "categoriesProfessional": {
+     "ES": 60.58,
+     "EB": 62.33,
+     "SC": 38.21,
+     "CM": 49.04,
+     "EO": 28.82,
+     "FS": 46.42,
+     "CP": 74.84,
+     "SO": 67.36,
+     "LG": 49.78,
+     "HE": 56.04
+    }
    },
    {
     "provider": "Alibaba",
@@ -210,7 +450,31 @@
     "source": "open",
     "genCommon": 41.27,
     "genProfessional": 40.97,
-    "gen": 41.0971186440678
+    "gen": 41.0971186440678,
+    "categoriesCommon": {
+     "CC": 49.0,
+     "ME": 32.73,
+     "DI": 50.25,
+     "ID": 42.74,
+     "FC": 35.36,
+     "CL": 49.04,
+     "PS": 28.8,
+     "GC": 54.04,
+     "MA": 27.63,
+     "EI": 51.47
+    },
+    "categoriesProfessional": {
+     "ES": 34.58,
+     "EB": 46.96,
+     "SC": 46.13,
+     "CM": 30.71,
+     "EO": 15.12,
+     "FS": 56.68,
+     "CP": 47.57,
+     "SO": 57.52,
+     "LG": 33.44,
+     "HE": 32.82
+    }
    },
    {
     "provider": "Alibaba",
@@ -221,7 +485,31 @@
     "source": "open",
     "genCommon": 39.43,
     "genProfessional": 38.39,
-    "gen": 38.830677966101696
+    "gen": 38.830677966101696,
+    "categoriesCommon": {
+     "CC": 49.72,
+     "ME": 29.39,
+     "DI": 42.25,
+     "ID": 35.19,
+     "FC": 32.87,
+     "CL": 31.87,
+     "PS": 28.26,
+     "GC": 56.1,
+     "MA": 27.0,
+     "EI": 54.58
+    },
+    "categoriesProfessional": {
+     "ES": 28.71,
+     "EB": 50.79,
+     "SC": 37.06,
+     "CM": 24.66,
+     "EO": 12.73,
+     "FS": 46.44,
+     "CP": 35.47,
+     "SO": 81.61,
+     "LG": 33.63,
+     "HE": 37.45
+    }
    },
    {
     "provider": "Alibaba",
@@ -232,7 +520,31 @@
     "source": "open",
     "genCommon": 36.14,
     "genProfessional": 38.0,
-    "gen": 37.21186440677966
+    "gen": 37.21186440677966,
+    "categoriesCommon": {
+     "CC": 24.19,
+     "ME": 31.65,
+     "DI": 37.71,
+     "ID": 39.94,
+     "FC": 31.77,
+     "CL": 44.66,
+     "PS": 17.95,
+     "GC": 52.66,
+     "MA": 29.61,
+     "EI": 59.16
+    },
+    "categoriesProfessional": {
+     "ES": 42.42,
+     "EB": 39.96,
+     "SC": 28.42,
+     "CM": 29.28,
+     "EO": 32.37,
+     "FS": 40.35,
+     "CP": 45.58,
+     "SO": 41.23,
+     "LG": 31.38,
+     "HE": 47.98
+    }
    },
    {
     "provider": "MiniMax",
@@ -243,7 +555,31 @@
     "source": "open",
     "genCommon": 43.24,
     "genProfessional": 44.96,
-    "gen": 44.23118644067797
+    "gen": 44.23118644067797,
+    "categoriesCommon": {
+     "CC": 46.44,
+     "ME": 35.99,
+     "DI": 54.83,
+     "ID": 42.7,
+     "FC": 23.8,
+     "CL": 30.32,
+     "PS": 31.95,
+     "GC": 57.99,
+     "MA": 19.44,
+     "EI": 60.44
+    },
+    "categoriesProfessional": {
+     "ES": 42.79,
+     "EB": 55.18,
+     "SC": 42.32,
+     "CM": 19.68,
+     "EO": 39.75,
+     "FS": 51.04,
+     "CP": 60.13,
+     "SO": 56.36,
+     "LG": 33.07,
+     "HE": 41.06
+    }
    },
    {
     "provider": "Z.ai",
@@ -254,7 +590,31 @@
     "source": "open",
     "genCommon": 53.89,
     "genProfessional": 54.44,
-    "gen": 54.20694915254237
+    "gen": 54.20694915254237,
+    "categoriesCommon": {
+     "CC": 54.95,
+     "ME": 37.16,
+     "DI": 59.72,
+     "ID": 50.25,
+     "FC": 45.34,
+     "CL": 59.45,
+     "PS": 46.71,
+     "GC": 73.28,
+     "MA": 32.94,
+     "EI": 66.3
+    },
+    "categoriesProfessional": {
+     "ES": 60.7,
+     "EB": 61.71,
+     "SC": 52.05,
+     "CM": 55.73,
+     "EO": 31.27,
+     "FS": 62.63,
+     "CP": 70.26,
+     "SO": 57.27,
+     "LG": 35.06,
+     "HE": 30.64
+    }
    },
    {
     "provider": "Z.ai",
@@ -265,7 +625,31 @@
     "source": "open",
     "genCommon": 52.87,
     "genProfessional": 58.17,
-    "gen": 55.924237288135586
+    "gen": 55.924237288135586,
+    "categoriesCommon": {
+     "CC": 62.02,
+     "ME": 40.78,
+     "DI": 60.27,
+     "ID": 50.34,
+     "FC": 40.54,
+     "CL": 52.15,
+     "PS": 40.59,
+     "GC": 72.68,
+     "MA": 33.48,
+     "EI": 67.58
+    },
+    "categoriesProfessional": {
+     "ES": 65.61,
+     "EB": 70.17,
+     "SC": 51.13,
+     "CM": 51.63,
+     "EO": 29.83,
+     "FS": 56.56,
+     "CP": 71.41,
+     "SO": 82.96,
+     "LG": 35.39,
+     "HE": 55.64
+    }
    },
    {
     "provider": "DeepSeek",
@@ -276,7 +660,31 @@
     "source": "open",
     "genCommon": 49.42,
     "genProfessional": 55.83,
-    "gen": 53.11389830508475
+    "gen": 53.11389830508475,
+    "categoriesCommon": {
+     "CC": 54.07,
+     "ME": 38.79,
+     "DI": 58.61,
+     "ID": 49.53,
+     "FC": 35.48,
+     "CL": 53.79,
+     "PS": 36.9,
+     "GC": 73.88,
+     "MA": 33.21,
+     "EI": 64.29
+    },
+    "categoriesProfessional": {
+     "ES": 60.46,
+     "EB": 61.5,
+     "SC": 53.85,
+     "CM": 55.42,
+     "EO": 28.92,
+     "FS": 60.94,
+     "CP": 52.28,
+     "SO": 82.44,
+     "LG": 35.71,
+     "HE": 56.04
+    }
    },
    {
     "provider": "DeepSeek",
@@ -287,7 +695,31 @@
     "source": "open",
     "genCommon": 50.1,
     "genProfessional": 48.92,
-    "gen": 49.419999999999995
+    "gen": 49.419999999999995,
+    "categoriesCommon": {
+     "CC": 54.13,
+     "ME": 36.53,
+     "DI": 59.42,
+     "ID": 49.19,
+     "FC": 40.84,
+     "CL": 55.98,
+     "PS": 45.99,
+     "GC": 60.31,
+     "MA": 32.85,
+     "EI": 67.03
+    },
+    "categoriesProfessional": {
+     "ES": 49.02,
+     "EB": 53.49,
+     "SC": 51.01,
+     "CM": 47.27,
+     "EO": 29.96,
+     "FS": 50.27,
+     "CP": 55.4,
+     "SO": 76.14,
+     "LG": 13.49,
+     "HE": 55.84
+    }
    },
    {
     "provider": "Moonshot",
@@ -298,7 +730,31 @@
     "source": "open",
     "genCommon": 54.9,
     "genProfessional": 57.19,
-    "gen": 56.21966101694915
+    "gen": 56.21966101694915,
+    "categoriesCommon": {
+     "CC": 63.45,
+     "ME": 38.07,
+     "DI": 59.57,
+     "ID": 52.5,
+     "FC": 42.0,
+     "CL": 57.26,
+     "PS": 40.23,
+     "GC": 73.63,
+     "MA": 33.48,
+     "EI": 65.57
+    },
+    "categoriesProfessional": {
+     "ES": 61.01,
+     "EB": 66.54,
+     "SC": 49.54,
+     "CM": 50.86,
+     "EO": 31.33,
+     "FS": 61.7,
+     "CP": 68.04,
+     "SO": 72.91,
+     "LG": 40.6,
+     "HE": 64.99
+    }
    }
   ]
  },

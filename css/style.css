@@ -688,26 +688,80 @@ td.best {
   font-weight: 600;
 }
 
-/* ---------- overall table: fewer, wider columns ---------- */
+/* ---------- overall table: all 118 environments plus all 20 categories ---------- */
 
 .lb-wide {
-  font-size: 0.86rem;
+  font-size: 0.84rem;
+  /* 27 columns fit no viewport, so the table takes its natural width and the
+     wrapper scrolls sideways instead of squeezing the numbers. */
+  width: max-content;
+  min-width: 100%;
 }
 
 .lb-wide thead th {
-  padding: 0.55rem 0.5rem;
+  padding: 0.5rem 0.45rem;
 }
 
 .lb-wide tbody td {
-  padding: 0.5rem;
+  padding: 0.45rem;
+}
+
+.lb-wide td.cat {
+  padding: 0.45rem 0.4rem;
+  font-size: 0.79rem;
+}
+
+.lb-wide td.model,
+.lb-wide th.model {
+  min-width: 11.5rem;
+}
+
+/* Vertical rules mark where one block of columns ends and the next begins. */
+th.divide,
+td.divide {
+  border-left: 1px solid var(--line);
+}
+
+/* Freeze the rank and model columns while the category block scrolls past, so a
+   row stays identifiable. Only above the narrow breakpoint: on a phone the frozen
+   pair would eat most of the viewport. --stick-2 is the measured width of the rank
+   column, written by leaderboard.js, since the model column starts where it ends. */
+@media (min-width: 720px) {
+  .lb-wide .stick-1,
+  .lb-wide .stick-2 {
+    position: sticky;
+    z-index: 3;
+    background: var(--bg-raised);
+  }
+
+  .lb-wide .stick-1 {
+    left: 0;
+  }
+
+  .lb-wide .stick-2 {
+    left: var(--stick-2, 2.6rem);
+    border-right: 1px solid var(--line);
+  }
+
+  .lb-wide thead .stick-1,
+  .lb-wide thead .stick-2 {
+    z-index: 4;
+    background: var(--bg-sunken);
+  }
+
+  /* Sticky cells need an opaque background, so the row hover tint has to be
+     baked in rather than layered as a translucent wash. */
+  .lb-wide tbody tr:hover .stick-1,
+  .lb-wide tbody tr:hover .stick-2 {
+    background: #141d1e;
+  }
 }
 
 /* The GEN column carries a proportional bar behind the value, so the ranking
    reads without comparing digits. Width comes from --w, set per row in JS. */
 th.big,
 td.big {
-  width: 34%;
-  min-width: 170px;
+  min-width: 124px;
 }
 
 td.big {

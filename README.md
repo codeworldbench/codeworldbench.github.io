@@ -10,7 +10,7 @@ retyped.
 
 | Page | Holds |
 | --- | --- |
-| `index.html` | Hero, the all-118-environment GEN leaderboard, three takeaways, the overview figure |
+| `index.html` | Hero, the all-118-environment GEN leaderboard with all 20 category columns, three takeaways, the overview figure |
 | `results.html` | Aggregation definitions, both subset tables in full, the by-subset figure, detailed observations |
 | `benchmark.html` | Task formalism, the two settings, construction pipeline, static profile, 20 domains |
 | `analysis.html` | Difficulty slices, scaffold effects, trace analysis, downstream transfer, conclusion |
@@ -38,6 +38,20 @@ not a micro-average, so the SWE columns stay on `results.html`, per subset, wher
 The home table shows the 14 default-scaffold rows, matching the paper's figures. `results.html` opts
 into all 19 rows via `data-all-scaffolds="true"` on `<body>`, matching the paper's tables. Either
 table can be switched with the "Show every scaffold" checkbox.
+
+## The 20 category columns
+
+The same table carries all twenty domain categories to the right of GEN, ten common then ten
+professional. Those columns are not aggregated across subsets and do not need to be: the two
+taxonomies are disjoint, so a common category scores only the 50 common environments and a
+professional one only the 68 professional environments. Each cell is the paper's per-subset number
+unchanged. That is why the group headers name the environment count (`· 50 env`, `· 68 env`) rather
+than implying a shared denominator.
+
+Twenty-seven columns fit no viewport, so `.lb-wide` takes its natural width and the wrapper scrolls
+sideways. Rank and model freeze on the left above 720px via `.stick-1` / `.stick-2`, with the second
+column's offset measured in `pinHeader()` and written to `--stick-2`, since a hardcoded value drifts
+with the rendered font.
 
 ## Preview locally
 

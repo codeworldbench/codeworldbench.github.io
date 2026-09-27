@@ -67,7 +67,8 @@
 
     <p class="section-sub">
       GEN is the construction pass rate over all 118 environments — the macro-average of
-      per-environment case pass rates, so every environment counts equally.
+      per-environment case pass rates, so every environment counts equally. Scroll right
+      for all 20 domain categories; rank and model stay pinned.
     </p>
 
     <div class="table-scroll" id="lb-overall">
@@ -77,8 +78,11 @@
     <p class="legend">
       OpenAI models run under Codex v0.154.0, every other model under Claude Code v2.1.251.
       Green marks the best value in a column; click any score header to re-sort.
-      <a href="results.html">Full tables</a> carry the ten category columns and the SWE
-      pass-to-pass and fail-to-pass rates for each subset.
+      The two category taxonomies are disjoint — a common code scores only the 50 common
+      environments, a professional code only the 68 professional ones — so those columns are
+      the paper's per-subset numbers unchanged. <a href="benchmark.html#categories">Category
+      codes</a> spell out the domains; <a href="results.html">full tables</a> add the SWE
+      pass-to-pass and fail-to-pass rates per subset.
     </p>
   </div>
 </section>

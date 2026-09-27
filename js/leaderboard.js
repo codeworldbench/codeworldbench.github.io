@@ -99,7 +99,8 @@
   function plainTh(label, cls, span) {
     var n = el("th", cls, label);
     if (span) n.colSpan = span;
-    if (cls !== "group") n.scope = "col";
+    // A group header spans several columns, so colgroup is the honest scope.
+    n.scope = n.classList.contains("group") ? "colgroup" : "col";
     return n;
   }
 
@@ -121,12 +122,17 @@
     return best;
   }
 
-  /* Pin the second header row directly below the group row. Its height depends
-     on the rendered font, so measure rather than hardcode. */
+  /* Pin the second header row directly below the group row, and the second frozen
+     column directly right of the first. Both offsets depend on rendered widths and
+     the font, so measure them rather than hardcode. */
   function pinHeader(table) {
     var group = table.querySelector("thead tr:first-child th.group");
     if (group) {
       table.style.setProperty("--group-h", group.getBoundingClientRect().height + "px");
+    }
+    var first = table.querySelector("tbody td.stick-1");
+    if (first) {
+      table.style.setProperty("--stick-2", first.getBoundingClientRect().width + "px");
     }
   }
 
@@ -139,35 +145,63 @@
   function renderOverall() {
     var mount = mounts.overall;
     var d = state.data.overall;
+    var catsC = state.data.categories.common;
+    var catsP = state.data.categories.professional;
     var rows = d.rows.filter(function (r) {
       return !state.defaultsOnly || isDefaultScaffold(r);
     });
 
+    /* Category keys are prefixed by subset because the two taxonomies are
+       independent column sets living in one table. */
     function valueOf(row, key) {
-      return key === "model" ? row.model + " " + row.scaffold : row[key];
+      if (key === "model") return row.model + " " + row.scaffold;
+      if (key.indexOf("c:") === 0) return row.categoriesCommon[key.slice(2)];
+      if (key.indexOf("p:") === 0) return row.categoriesProfessional[key.slice(2)];
+      return row[key];
     }
     var sort = state.overallSort;
     rows = sortBy(rows, sort, valueOf);
-    var best = columnMaxima(rows, ["gen", "genCommon", "genProfessional"], valueOf);
+
+    var keys = ["gen", "genCommon", "genProfessional"]
+      .concat(catsC.map(function (c) { return "c:" + c.code; }))
+      .concat(catsP.map(function (c) { return "p:" + c.code; }));
+    var best = columnMaxima(rows, keys, valueOf);
 
     var table = el("table", "lb-wide");
     var cap = el("caption", "skip-link");
-    cap.textContent =
-      "GEN scores over all 118 environments, " + rows.length + " rows, ranked.";
+    cap.textContent = "GEN scores over all 118 environments with per-category breakdown, " +
+      rows.length + " rows, ranked.";
     table.appendChild(cap);
 
     var thead = el("thead");
+    var top = el("tr");
+    top.appendChild(plainTh("", "stick-1 left"));
+    top.appendChild(plainTh("", "stick-2 left"));
+    top.appendChild(plainTh("", "left", 2));
+    top.appendChild(plainTh("Overall GEN", "group", 3));
+    top.appendChild(plainTh("Common categories · 50 env", "group divide", catsC.length));
+    top.appendChild(plainTh("Professional categories · 68 env", "group divide", catsP.length));
+    thead.appendChild(top);
+
     var tr = el("tr");
-    tr.appendChild(plainTh("#", "rank"));
-    tr.appendChild(sortTh("Model", "model", "left", sort, renderOverall));
+    tr.appendChild(plainTh("#", "rank stick-1"));
+    tr.appendChild(sortTh("Model", "model", "left stick-2", sort, renderOverall));
     tr.appendChild(plainTh("Params.", "left"));
     tr.appendChild(plainTh("Scaffold", "left"));
-    tr.appendChild(sortTh("GEN", "gen", "big", sort, renderOverall,
-      "Construction pass rate over all 118 environments"));
-    tr.appendChild(sortTh("Common", "genCommon", "", sort, renderOverall,
+    tr.appendChild(sortTh("All 118", "gen", "big", sort, renderOverall,
+      "GEN over all 118 environments"));
+    tr.appendChild(sortTh("Com.", "genCommon", "", sort, renderOverall,
       "GEN over the 50 common environments"));
     tr.appendChild(sortTh("Prof.", "genProfessional", "", sort, renderOverall,
       "GEN over the 68 professional environments"));
+    catsC.forEach(function (c, i) {
+      tr.appendChild(sortTh(c.code, "c:" + c.code, i === 0 ? "divide" : "", sort,
+        renderOverall, c.name + " (common)"));
+    });
+    catsP.forEach(function (c, i) {
+      tr.appendChild(sortTh(c.code, "p:" + c.code, i === 0 ? "divide" : "", sort,
+        renderOverall, c.name + " (professional)"));
+    });
     thead.appendChild(tr);
     table.appendChild(thead);
 
@@ -175,30 +209,47 @@
     var max = best.gen;
     rows.forEach(function (row, i) {
       var r = el("tr");
-      r.appendChild(el("td", "rank", String(i + 1)));
-      r.appendChild(logoCell(row, "model left"));
+      r.appendChild(el("td", "rank stick-1", String(i + 1)));
+      r.appendChild(logoCell(row, "model left stick-2"));
       r.appendChild(el("td", "left", row.params));
       r.appendChild(el("td", "scaffold left", row.scaffold));
 
-      // GEN gets a bar so the ranking reads without parsing digits.
+      // The headline GEN gets a bar so the ranking reads without parsing digits.
       var gen = el("td", "metric big gen" + (row.gen === best.gen ? " best" : ""));
       var bar = el("span", "bar");
       bar.style.setProperty("--w", (row.gen / max * 100).toFixed(1) + "%");
       gen.appendChild(bar);
       gen.appendChild(el("span", "barval", fmt(row.gen)));
+      if (sort.key === "gen") gen.classList.add("sorted-col");
       r.appendChild(gen);
 
-      r.appendChild(el("td", "metric sub" + (row.genCommon === best.genCommon ? " best" : ""),
-        fmt(row.genCommon)));
-      r.appendChild(el("td", "metric sub" +
-        (row.genProfessional === best.genProfessional ? " best" : ""),
-        fmt(row.genProfessional)));
+      [["genCommon", "genCommon"], ["genProfessional", "genProfessional"]]
+        .forEach(function (pair) {
+          var k = pair[0];
+          var td = el("td", "metric sub" + (row[k] === best[k] ? " best" : ""), fmt(row[k]));
+          if (sort.key === k) td.classList.add("sorted-col");
+          r.appendChild(td);
+        });
+
+      [[catsC, "categoriesCommon", "c:"], [catsP, "categoriesProfessional", "p:"]]
+        .forEach(function (blk) {
+          blk[0].forEach(function (c, j) {
+            var v = row[blk[1]][c.code];
+            var key = blk[2] + c.code;
+            var td = el("td", "cat" + (j === 0 ? " divide" : "") +
+              (v === best[key] ? " best" : ""), fmt(v));
+            if (sort.key === key) td.classList.add("sorted-col");
+            r.appendChild(td);
+          });
+        });
+
       tbody.appendChild(r);
     });
     table.appendChild(tbody);
 
     mount.innerHTML = "";
     mount.appendChild(table);
+    pinHeader(table);
     if (mounts.overallMeta) {
       mounts.overallMeta.textContent = d.environments + " environments · " +
         d.cases.toLocaleString() + " hidden cases · " + rows.length + " rows";

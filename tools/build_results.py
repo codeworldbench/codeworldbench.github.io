@@ -137,6 +137,12 @@ def build_overall(common: list[dict], professional: list[dict]) -> list[dict]:
                 "genCommon": c["gen"],
                 "genProfessional": p["gen"],
                 "gen": (COMMON_ENVS * c["gen"] + PROFESSIONAL_ENVS * p["gen"]) / total,
+                # The two taxonomies are disjoint: a common category covers only
+                # the 50 common environments and a professional one only the 68
+                # professional environments. So both blocks carry the paper's
+                # per-subset numbers unchanged -- nothing here is combined.
+                "categoriesCommon": c["categories"],
+                "categoriesProfessional": p["categories"],
             }
         )
     return rows
