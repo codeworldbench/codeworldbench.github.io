@@ -206,7 +206,6 @@
     table.appendChild(thead);
 
     var tbody = el("tbody");
-    var max = best.gen;
     rows.forEach(function (row, i) {
       var r = el("tr");
       r.appendChild(el("td", "rank stick-1", String(i + 1)));
@@ -214,11 +213,17 @@
       r.appendChild(el("td", "left", row.params));
       r.appendChild(el("td", "scaffold left", row.scaffold));
 
-      // The headline GEN gets a bar so the ranking reads without parsing digits.
+      /* The headline GEN gets a bar so the ranking reads without parsing digits.
+         The scale is absolute, not normalized to the leader: the bar is a
+         percentage of the full 0-100 track, so a 50 fills half of it and only a
+         perfect 100 fills it. Scaling to the maximum instead would paint the top
+         row full-width and overstate how far construction has actually got. */
       var gen = el("td", "metric big gen" + (row.gen === best.gen ? " best" : ""));
+      var track = el("span", "bar-track");
       var bar = el("span", "bar");
-      bar.style.setProperty("--w", (row.gen / max * 100).toFixed(1) + "%");
-      gen.appendChild(bar);
+      bar.style.setProperty("--w", row.gen.toFixed(1) + "%");
+      track.appendChild(bar);
+      gen.appendChild(track);
       gen.appendChild(el("span", "barval", fmt(row.gen)));
       if (sort.key === "gen") gen.classList.add("sorted-col");
       r.appendChild(gen);

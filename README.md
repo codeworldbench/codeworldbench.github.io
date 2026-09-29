@@ -135,6 +135,10 @@ pdftoppm -png -r 160 -singlefile figures/<name>.pdf /tmp/<name>
 convert /tmp/<name>.png -trim +repage -bordercolor white -border 14 assets/figures/<name>.png
 ```
 
+Where poppler is unavailable, PyMuPDF rasterizes the same way — `fitz.open(pdf)[0].get_pixmap(dpi=160)`
+— and the trim step is unchanged. Rendering both the old and new PDFs and comparing mean absolute
+pixel difference is how the committed PNGs were confirmed to come from the current paper.
+
 ## Publishing
 
 Published at <https://codeworldbench.github.io/> from the `codeworldbench/codeworldbench.github.io`

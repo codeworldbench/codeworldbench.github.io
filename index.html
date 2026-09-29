@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CodeWorldBench — Can coding agents build executable agent worlds?</title>
+<title>CodeWorldBench — How well can coding agents build executable agent worlds?</title>
 <meta name="description" content="CodeWorldBench evaluates whether coding agents can construct and repair executable, stateful code worlds. 118 environments, 25,015 hidden cases, graded on outputs and persistent state.">
 <meta property="og:title" content="CodeWorldBench">
 <meta property="og:description" content="118 executable environments, 25,015 hidden cases. Build a stateful code world from scratch, or repair a broken one.">
@@ -31,10 +31,16 @@
 <header class="hero hero-tight" id="top">
   <div class="wrap">
     <p class="eyebrow">Execution-based benchmark · code-driven world construction</p>
-    <h1>Can coding agents build<br>executable agent worlds?<span class="cursor"></span></h1>
+    <h1>How well can coding agents build<br>executable agent worlds?<span class="cursor"></span></h1>
     <p class="tagline">
       Agents emit runnable repositories routinely. CodeWorldBench asks the harder question: does the
       world they build transition the way its specification says it should?
+    </p>
+    <p class="tagline">
+      Platforms already checkpoint agent-built sessions into reusable environments at over five
+      thousand creations per second. Capacity has a production answer; fidelity does not. A world
+      that runs but transitions incorrectly does not withhold a reward signal, it supplies a
+      misleading one.
     </p>
 
     <div class="stats">
@@ -90,7 +96,7 @@
 <section id="takeaways">
   <div class="wrap">
     <h2><span class="hash">#</span>What we found</h2>
-    <div class="cards cards-3">
+    <div class="cards">
       <div class="card">
         <h3>Preservation looks solved. It is not the task.</h3>
         <p>
@@ -114,6 +120,15 @@
           Generated repositories pass structural setup and then mismanage state: stale counters,
           shallow success envelopes, inconsistent views. Agents build first and validate transition
           rules later, or never.
+        </p>
+      </div>
+      <div class="card">
+        <h3>The defects reach the next agent.</h3>
+        <p>
+          An independent agent working inside these generated environments reaches only
+          <span class="num">12%</span> to <span class="num">50%</span> of the success rate it gets in
+          the reference environments — mostly because tools are broken or missing, not because the
+          tasks got harder.
         </p>
       </div>
     </div>

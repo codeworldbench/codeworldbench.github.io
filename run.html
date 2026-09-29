@@ -130,6 +130,52 @@ cwb stop   --models <span class="s">YOUR_MODEL_NAME</span>   <span class="c"># s
       </li>
     </ol>
 
+    <h2 id="inference"><span class="hash">#</span>Inference configuration</h2>
+    <p class="section-sub">
+      The reported runs use a <strong>1M-token context window</strong> and a
+      <strong>64K-token output limit</strong>, except Qwen models at 256K and 32K. Where the API
+      exposes them, sampling is <strong>temperature 1.0</strong> and <strong>top-p 0.95</strong>.
+      Scaffolds are pinned: Codex v0.154.0 for OpenAI models, Claude Code v2.1.251 for everything
+      else. Reasoning effort is set per model, so matching it matters more than it looks.
+    </p>
+
+    <div class="table-scroll">
+      <table>
+        <caption class="skip-link">Reasoning setting configured for each evaluated model and for the models used to construct benchmark artifacts.</caption>
+        <thead>
+          <tr>
+            <th class="left" scope="col">Model</th>
+            <th class="left" scope="col">Reasoning setting</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="left model">GPT-5.6 Sol</td><td class="left"><code>xhigh</code></td></tr>
+          <tr><td class="left model">GPT-5.6 Luna</td><td class="left"><code>xhigh</code></td></tr>
+          <tr><td class="left model">GPT-5.6 Terra</td><td class="left"><code>xhigh</code></td></tr>
+          <tr><td class="left model">GPT-6 Astra</td><td class="left"><code>xhigh</code></td></tr>
+          <tr><td class="left model">Claude Opus 5</td><td class="left"><code>xhigh</code></td></tr>
+          <tr><td class="left model">Doubao-seed-evolving</td><td class="left"><code>xhigh</code></td></tr>
+          <tr><td class="left model">Qwen3.8-27B</td><td class="left"><code>xhigh</code></td></tr>
+          <tr><td class="left model">Qwen3.6-35B-A3B</td><td class="left">Thinking enabled</td></tr>
+          <tr><td class="left model">MiniMax-M3</td><td class="left"><code>adaptive</code></td></tr>
+          <tr><td class="left model">DeepSeek-v4-pro</td><td class="left"><code>max</code></td></tr>
+          <tr><td class="left model">DeepSeek-v4.1-flash</td><td class="left"><code>max</code></td></tr>
+          <tr><td class="left model">GLM-5.3-Flash</td><td class="left"><code>max</code></td></tr>
+          <tr><td class="left model">GLM-5.3</td><td class="left"><code>max</code></td></tr>
+          <tr><td class="left model">Kimi K3</td><td class="left"><code>max</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="legend">
+      Named effort levels are reported as configured; <em>thinking</em> and <em>adaptive</em> denote
+      enabled thinking modes. Three further models build the artifacts rather than being scored on
+      them: <b>GPT-5.5</b> (<code>xhigh</code>) writes the reference environments,
+      <b>Qwen3.6-27B</b> (thinking enabled) produces the defective repositories behind SWE, and
+      <b>GLM-5.2</b> (<code>max</code>) is one of the downstream environment generators. The
+      downstream solver is Qwen3.8-27B at temperature 0 with at most 30 tool calls per task.
+    </p>
+
     <h2><span class="hash">#</span>Reading your scores</h2>
     <p class="section-sub">
       GEN and the category columns are <strong>macro</strong>-averages over environments; P2P and F2P

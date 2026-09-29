@@ -758,23 +758,37 @@ td.divide {
 }
 
 /* The GEN column carries a proportional bar behind the value, so the ranking
-   reads without comparing digits. Width comes from --w, set per row in JS. */
+   reads without comparing digits. Width comes from --w, set per row in JS.
+
+   The bar sits inside a track that spans the whole 0-100 range, and --w is the
+   score itself as a percentage. So a 50 fills half the track and only a 100
+   fills it end to end. The track is drawn faintly rather than left invisible,
+   because an absolute scale is only readable if the unfilled remainder is
+   visible -- otherwise every bar just looks short. */
 th.big,
 td.big {
-  min-width: 124px;
+  min-width: 176px;
 }
 
 td.big {
   position: relative;
 }
 
-td.big .bar {
+td.big .bar-track {
   display: block;
   position: absolute;
   left: 0.5rem;
+  right: 3.55rem;
   top: 50%;
   transform: translateY(-50%);
   height: 1.15rem;
+  background: rgba(255, 255, 255, 0.032);
+  border-radius: 2px;
+}
+
+td.big .bar {
+  display: block;
+  height: 100%;
   width: var(--w, 0%);
   background: linear-gradient(90deg, rgba(74, 222, 128, 0.32), rgba(74, 222, 128, 0.12));
   border-left: 2px solid var(--accent);
@@ -793,6 +807,34 @@ td.metric.sub {
 
 td.dash {
   color: var(--fg-faint);
+}
+
+/* Capability matrix marks. The glyph alone would carry the meaning for a sighted
+   reader, so each cell also gets an aria-label in the markup. Centred because
+   these columns hold a single character, not a number to align on the decimal. */
+td.yes,
+td.no {
+  text-align: center;
+}
+
+td.yes {
+  color: var(--accent);
+}
+
+/* The absent mark is content, not decoration, so it takes --fg-faint (which is
+   picked to clear AA on every surface) rather than a dimmer grey. The glyphs
+   differ too, so the distinction never rests on colour alone. */
+td.no {
+  color: var(--fg-faint);
+}
+
+tbody tr.ours td {
+  background: rgba(74, 222, 128, 0.055);
+  border-bottom-color: var(--line);
+}
+
+tbody tr.ours:hover td {
+  background: rgba(74, 222, 128, 0.085);
 }
 
 .more {
@@ -940,6 +982,26 @@ pre .k {
 
 .cat-cell .name {
   color: var(--fg-dim);
+}
+
+/* Per-category environment counts sit on their own line so the long category
+   names above them keep wrapping freely inside a narrow grid cell. */
+.cat-cell .envs {
+  display: block;
+  margin-top: 0.2rem;
+  color: var(--fg-faint);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+}
+
+/* The taxonomy tables hold sentence-length lists, so they opt out of the
+   nowrap that keeps the numeric leaderboard columns aligned. */
+td.envlist {
+  white-space: normal;
+  color: var(--fg-dim);
+  font-size: 0.8rem;
+  line-height: 1.55;
+  min-width: 26rem;
 }
 
 .two-col {

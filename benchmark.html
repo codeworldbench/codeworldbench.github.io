@@ -44,7 +44,98 @@
   </div>
 </header>
 
-<section id="formulation" class="flush">
+<section id="comparison" class="flush">
+  <div class="wrap">
+    <h2><span class="hash">#</span>What other benchmarks measure</h2>
+    <p class="section-sub">
+      Function-level benchmarks target localized synthesis under static tests. Repository-level and
+      software-engineering benchmarks extend that to completion, repair, and repository construction,
+      but tie correctness to APIs, unit tests, or patches over existing code. Tool-use benchmarks
+      evaluate agents <em>inside</em> already-specified environments, testing whether they call tools
+      correctly rather than whether they can build the state dynamics beneath those tools. Two
+      columns stay empty across the board.
+    </p>
+
+    <div class="table-scroll">
+      <table>
+        <caption class="skip-link">Coding benchmarks ordered by release date, showing which are repository-level and cover generation, repair, persistent state, and world construction.</caption>
+        <thead>
+          <tr>
+            <th class="left" scope="col">Benchmark</th>
+            <th class="left" scope="col">Scale</th>
+            <th class="group" scope="col">Repo-level</th>
+            <th class="group" scope="col">Generation</th>
+            <th class="group" scope="col">Repair</th>
+            <th class="group" scope="col">Persistent state</th>
+            <th class="group" scope="col">World construction</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="left model">HumanEval</td><td class="left">164 problems</td>
+            <td class="no" aria-label="no">✗</td><td class="yes" aria-label="yes">✓</td><td class="no" aria-label="no">✗</td><td class="no" aria-label="no">✗</td><td class="no" aria-label="no">✗</td>
+          </tr>
+          <tr>
+            <td class="left model">MBPP</td><td class="left">974 problems</td>
+            <td class="no" aria-label="no">✗</td><td class="yes" aria-label="yes">✓</td><td class="no" aria-label="no">✗</td><td class="no" aria-label="no">✗</td><td class="no" aria-label="no">✗</td>
+          </tr>
+          <tr>
+            <td class="left model">RepoBench</td><td class="left">1,669 repositories</td>
+            <td class="yes" aria-label="yes">✓</td><td class="yes" aria-label="yes">✓</td><td class="no" aria-label="no">✗</td><td class="no" aria-label="no">✗</td><td class="no" aria-label="no">✗</td>
+          </tr>
+          <tr>
+            <td class="left model">SWE-bench Verified</td><td class="left">500 issues</td>
+            <td class="yes" aria-label="yes">✓</td><td class="no" aria-label="no">✗</td><td class="yes" aria-label="yes">✓</td><td class="no" aria-label="no">✗</td><td class="no" aria-label="no">✗</td>
+          </tr>
+          <tr>
+            <td class="left model">Commit0</td><td class="left">54 libraries</td>
+            <td class="yes" aria-label="yes">✓</td><td class="yes" aria-label="yes">✓</td><td class="no" aria-label="no">✗</td><td class="no" aria-label="no">✗</td><td class="no" aria-label="no">✗</td>
+          </tr>
+          <tr>
+            <td class="left model">MLE-bench</td><td class="left">75 competitions</td>
+            <td class="yes" aria-label="yes">✓</td><td class="yes" aria-label="yes">✓</td><td class="no" aria-label="no">✗</td><td class="no" aria-label="no">✗</td><td class="no" aria-label="no">✗</td>
+          </tr>
+          <tr>
+            <td class="left model">NL2Repo-Bench</td><td class="left">104 repositories</td>
+            <td class="yes" aria-label="yes">✓</td><td class="yes" aria-label="yes">✓</td><td class="no" aria-label="no">✗</td><td class="no" aria-label="no">✗</td><td class="no" aria-label="no">✗</td>
+          </tr>
+          <tr>
+            <td class="left model">Terminal-Bench</td><td class="left">89 tasks</td>
+            <td class="yes" aria-label="yes">✓</td><td class="no" aria-label="no">✗</td><td class="no" aria-label="no">✗</td><td class="no" aria-label="no">✗</td><td class="no" aria-label="no">✗</td>
+          </tr>
+          <tr>
+            <td class="left model">ProgramBench</td><td class="left">200 programs</td>
+            <td class="yes" aria-label="yes">✓</td><td class="yes" aria-label="yes">✓</td><td class="no" aria-label="no">✗</td><td class="no" aria-label="no">✗</td><td class="no" aria-label="no">✗</td>
+          </tr>
+          <tr>
+            <td class="left model">RepoZero</td><td class="left">100 repositories</td>
+            <td class="yes" aria-label="yes">✓</td><td class="yes" aria-label="yes">✓</td><td class="no" aria-label="no">✗</td><td class="no" aria-label="no">✗</td><td class="no" aria-label="no">✗</td>
+          </tr>
+          <tr>
+            <td class="left model">DeepSWE</td><td class="left">113 tasks</td>
+            <td class="yes" aria-label="yes">✓</td><td class="yes" aria-label="yes">✓</td><td class="yes" aria-label="yes">✓</td><td class="no" aria-label="no">✗</td><td class="no" aria-label="no">✗</td>
+          </tr>
+          <tr>
+            <td class="left model">FrontierSWE</td><td class="left">34 tasks</td>
+            <td class="yes" aria-label="yes">✓</td><td class="yes" aria-label="yes">✓</td><td class="yes" aria-label="yes">✓</td><td class="no" aria-label="no">✗</td><td class="no" aria-label="no">✗</td>
+          </tr>
+          <tr class="ours">
+            <td class="left model"><b>CodeWorldBench</b></td><td class="left"><b>118 environments × 2 settings</b></td>
+            <td class="yes" aria-label="yes">✓</td><td class="yes" aria-label="yes">✓</td><td class="yes" aria-label="yes">✓</td><td class="yes" aria-label="yes">✓</td><td class="yes" aria-label="yes">✓</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="legend">
+      Ordered by release date. <b>Persistent state</b> means hidden checks on the state actions
+      induce. <b>World construction</b> means implementing an executable environment another agent can
+      call.
+    </p>
+  </div>
+</section>
+
+<section id="formulation">
   <div class="wrap">
     <h2><span class="hash">#</span>Task formulation</h2>
     <p class="section-sub">
@@ -72,10 +163,21 @@
         <h3>Behavioral equivalence, not code similarity</h3>
         <p>
           Between 2.2% and 3.0% of state checks require a field to be <em>absent</em> — a condition no
-          return-value check can express.
+          return-value check can express. That is how a case catches a tool which writes a record it
+          should have rejected.
         </p>
       </div>
     </div>
+
+    <p class="section-sub">
+      The checks are not a thin layer over the return value. <span class="num">5,914</span> of the
+      14,069 common cases carry state assertions, and on professional the balance reverses —
+      <span class="num">8,105</span> of 10,946. A common case that checks state names 2.77 paths on
+      average and a professional one 8.11, the deepest naming 76 and 190. Counting tools rather than
+      cases, <span class="num">69.1%</span> of common tools and <span class="num">77.1%</span> of
+      professional ones carry at least one documented state effect, so most of each surface cannot be
+      verified from return values alone.
+    </p>
   </div>
 </section>
 
@@ -93,18 +195,28 @@
           The agent implements the code world from scratch in a workspace containing initial data and
           tool documentation, with contracts specifying entities, tool surfaces, and behavior. Hidden
           tests execute against reset seed states across three nested slices: L1 (easiest 25%), L2
-          (easiest 50%), and L3 (the full surface, reported everywhere on this site).
+          (easiest 50%), and L3 (the full surface, reported everywhere on this site). On the common
+          pool that works out to 7.8, 16.3, and 32.9 tools per environment, so each slice roughly
+          doubles the verified surface.
         </p>
       </div>
       <div>
         <h3>SWE — semantic repair</h3>
         <p class="body">
-          Semantic repair on runnable but defective repositories, where the defects arose during
-          generation. Tool surfaces and seed states are preserved, and verification artifacts withheld
-          to prevent leakage. Fail-to-pass and pass-to-pass rates are reported separately, decoupling
-          bug fixes from regression avoidance.
+          Semantic repair on runnable but defective repositories generated by Qwen3.6-27B under
+          OpenHands, where the defects arose during generation rather than being injected. Tool
+          surfaces and seed states are preserved, and verification artifacts withheld to prevent
+          leakage. Fail-to-pass and pass-to-pass rates are reported separately, decoupling bug fixes
+          from regression avoidance.
         </p>
       </div>
+    </div>
+
+    <div class="note">
+      The defect surface is broad, not localized: the failing baseline cases touch 29.8 of the 32.9
+      tools in a common environment and 29.7 of 40.8 in a professional one. Repair here is not the
+      localized-patch problem of issue-based benchmarks, which is why F2P and P2P have to be reported
+      separately — across a surface this wide an agent can satisfy one while regressing the other.
     </div>
   </div>
 </section>
@@ -113,8 +225,8 @@
   <div class="wrap">
     <h2><span class="hash">#</span>How the environments were built</h2>
     <p class="section-sub">
-      Reference worlds are built under human-authored contracts with execution-based admission. A
-      world enters the benchmark only after every tool passes its checks.
+      GPT-5.5 builds the reference worlds under human-authored contracts with execution-based
+      admission. A world enters the benchmark only after every tool passes its checks.
     </p>
     <ol class="steps steps-tight">
       <li>
@@ -169,9 +281,18 @@
     <h2><span class="hash">#</span>Static profile</h2>
     <p class="section-sub">
       118 environments with 4,417 tools — 32.9 per common environment and 40.8 per professional one —
-      and 25,015 hidden cases (14,069 common, 10,946 professional). State representations span static
-      tables, complex configurations, and event-driven databases. A common environment documents 69.9
-      distinct error identifiers across its 32.9 tools.
+      and 25,015 hidden cases (14,069 common, 10,946 professional), which SWE splits into 9,753
+      pass-to-pass and 15,262 fail-to-pass. State representations span static tables, complex
+      configurations, and event-driven databases.
+    </p>
+    <p class="section-sub">
+      The two pools load the same axes differently. A common environment documents
+      <span class="num">69.9</span> distinct error identifiers across its 32.9 tools, 5.0 per tool;
+      a professional one documents 10.3, 2.4 per tool, but spends far more words per tool contract —
+      <span class="num">542</span> against 200. Common environments demand many precise rejection
+      paths, professional ones long single-tool specifications. Professional environments also start
+      from small seed tables (mean 74 records against 10,068 on common), so 24.9% of their cases
+      declare setup calls to reach states the seed database does not contain, against 2.2% on common.
     </p>
     <figure>
       <img src="assets/figures/codeworldbench_category_distribution_1x4.png"
@@ -194,30 +315,142 @@
 
     <h3>Common · 50 environments</h3>
     <div class="cat-grid">
-      <div class="cat-cell"><span class="code">CC</span><span class="name">Communication Collaboration</span></div>
-      <div class="cat-cell"><span class="code">ME</span><span class="name">Media Entertainment</span></div>
-      <div class="cat-cell"><span class="code">DI</span><span class="name">Data Intelligence</span></div>
-      <div class="cat-cell"><span class="code">ID</span><span class="name">Infrastructure Development</span></div>
-      <div class="cat-cell"><span class="code">FC</span><span class="name">Financial Compliance</span></div>
-      <div class="cat-cell"><span class="code">CL</span><span class="name">Commerce Logistics</span></div>
-      <div class="cat-cell"><span class="code">PS</span><span class="name">Public Service</span></div>
-      <div class="cat-cell"><span class="code">GC</span><span class="name">Geospatial Construction</span></div>
-      <div class="cat-cell"><span class="code">MA</span><span class="name">Manufacturing Agriculture</span></div>
-      <div class="cat-cell"><span class="code">EI</span><span class="name">Embodied Intelligence</span></div>
+      <div class="cat-cell"><span class="code">CC</span><span class="name">Communication Collaboration</span><span class="envs">7 env</span></div>
+      <div class="cat-cell"><span class="code">ME</span><span class="name">Media Entertainment</span><span class="envs">4 env</span></div>
+      <div class="cat-cell"><span class="code">DI</span><span class="name">Data Intelligence</span><span class="envs">7 env</span></div>
+      <div class="cat-cell"><span class="code">ID</span><span class="name">Infrastructure Development</span><span class="envs">8 env</span></div>
+      <div class="cat-cell"><span class="code">FC</span><span class="name">Financial Compliance</span><span class="envs">6 env</span></div>
+      <div class="cat-cell"><span class="code">CL</span><span class="name">Commerce Logistics</span><span class="envs">4 env</span></div>
+      <div class="cat-cell"><span class="code">PS</span><span class="name">Public Service</span><span class="envs">4 env</span></div>
+      <div class="cat-cell"><span class="code">GC</span><span class="name">Geospatial Construction</span><span class="envs">4 env</span></div>
+      <div class="cat-cell"><span class="code">MA</span><span class="name">Manufacturing Agriculture</span><span class="envs">4 env</span></div>
+      <div class="cat-cell"><span class="code">EI</span><span class="name">Embodied Intelligence</span><span class="envs">2 env</span></div>
     </div>
+    <div class="table-scroll" style="margin-top:1.4rem">
+      <table>
+        <caption class="skip-link">The 50 common environments, listed by category. Environment IDs are omitted.</caption>
+        <thead>
+          <tr>
+            <th class="left" scope="col">Category</th>
+            <th class="left" scope="col">Scenarios</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="left model">Communication Collaboration</td>
+            <td class="left envlist">Email · Instant Messaging · Message Bus · Social Media Operations · Advertising Management · Knowledge Base · Slides Generation</td>
+          </tr>
+          <tr>
+            <td class="left model">Media Entertainment</td>
+            <td class="left envlist">Video Platform · Public Relations · Ticketing Management · Game Operations</td>
+          </tr>
+          <tr>
+            <td class="left model">Data Intelligence</td>
+            <td class="left envlist">Relational Database · NoSQL Database · Environmental Monitoring · Document Processing · Paper Management · Business Registration · Hospital Directory</td>
+          </tr>
+          <tr>
+            <td class="left model">Infrastructure Development</td>
+            <td class="left envlist">Web Search · Cloud Resource Management · Log Monitoring · Configuration Center · Desktop Simulation · IoT Simulation · Project Management · API Documentation</td>
+          </tr>
+          <tr>
+            <td class="left model">Financial Compliance</td>
+            <td class="left envlist">E-commerce · Banking Operations · Contract Management · Intellectual Property · Cryptocurrency Management · NFT Marketplace</td>
+          </tr>
+          <tr>
+            <td class="left model">Commerce Logistics</td>
+            <td class="left envlist">Logistics Delivery · Supply Chain · Google Sheets (&times;2)</td>
+          </tr>
+          <tr>
+            <td class="left model">Public Service</td>
+            <td class="left envlist">Vehicle Administration · Ecological Protection · Airline Customer Service · Healthcare Support</td>
+          </tr>
+          <tr>
+            <td class="left model">Geospatial Construction</td>
+            <td class="left envlist">Shared Mobility · Traffic Monitoring · Lease Management · Construction Project</td>
+          </tr>
+          <tr>
+            <td class="left model">Manufacturing Agriculture</td>
+            <td class="left envlist">Manufacturing Execution · Industrial Control · Smart Agriculture · Veterinary Practice</td>
+          </tr>
+          <tr>
+            <td class="left model">Embodied Intelligence</td>
+            <td class="left envlist">Embodied Intelligence (&times;2)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="legend">Environment IDs are omitted from both pools.</p>
 
     <h3>Professional · 68 environments</h3>
+    <p class="section-sub">
+      The professional pool models real software products, which is where its larger tool surfaces and
+      longer per-tool contracts come from.
+    </p>
     <div class="cat-grid">
-      <div class="cat-cell"><span class="code">ES</span><span class="name">Engineering Systems</span></div>
-      <div class="cat-cell"><span class="code">EB</span><span class="name">Embedded Systems</span></div>
-      <div class="cat-cell"><span class="code">SC</span><span class="name">Scientific Computing</span></div>
-      <div class="cat-cell"><span class="code">CM</span><span class="name">Creative Media</span></div>
-      <div class="cat-cell"><span class="code">EO</span><span class="name">Enterprise Operations</span></div>
-      <div class="cat-cell"><span class="code">FS</span><span class="name">Financial Services</span></div>
-      <div class="cat-cell"><span class="code">CP</span><span class="name">Commercial Platforms</span></div>
-      <div class="cat-cell"><span class="code">SO</span><span class="name">Supply Operations</span></div>
-      <div class="cat-cell"><span class="code">LG</span><span class="name">Legal Governance</span></div>
-      <div class="cat-cell"><span class="code">HE</span><span class="name">Health Education</span></div>
+      <div class="cat-cell"><span class="code">ES</span><span class="name">Engineering Systems</span><span class="envs">12 env</span></div>
+      <div class="cat-cell"><span class="code">EB</span><span class="name">Embedded Systems</span><span class="envs">7 env</span></div>
+      <div class="cat-cell"><span class="code">SC</span><span class="name">Scientific Computing</span><span class="envs">7 env</span></div>
+      <div class="cat-cell"><span class="code">CM</span><span class="name">Creative Media</span><span class="envs">6 env</span></div>
+      <div class="cat-cell"><span class="code">EO</span><span class="name">Enterprise Operations</span><span class="envs">7 env</span></div>
+      <div class="cat-cell"><span class="code">FS</span><span class="name">Financial Services</span><span class="envs">10 env</span></div>
+      <div class="cat-cell"><span class="code">CP</span><span class="name">Commercial Platforms</span><span class="envs">6 env</span></div>
+      <div class="cat-cell"><span class="code">SO</span><span class="name">Supply Operations</span><span class="envs">6 env</span></div>
+      <div class="cat-cell"><span class="code">LG</span><span class="name">Legal Governance</span><span class="envs">4 env</span></div>
+      <div class="cat-cell"><span class="code">HE</span><span class="name">Health Education</span><span class="envs">3 env</span></div>
+    </div>
+
+    <div class="table-scroll" style="margin-top:1.4rem">
+      <table>
+        <caption class="skip-link">The 68 professional environments, listed by category.</caption>
+        <thead>
+          <tr>
+            <th class="left" scope="col">Category</th>
+            <th class="left" scope="col">Environments</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="left model">Engineering Systems</td>
+            <td class="left envlist">AutoCAD · Siemens NX · Abaqus · TIA Portal · CATIA V6 · SimScale · 3DEXPERIENCE Platform · Autodesk CFD · SOLIDWORKS · Studio 5000 Logix Designer · FactoryTalk View SE · Archicad</td>
+          </tr>
+          <tr>
+            <td class="left model">Embedded Systems</td>
+            <td class="left envlist">dSPACE ConfigurationDesk · Altium Designer · Synopsys IC Compiler II · Ansys SCADE Suite · dSPACE ControlDesk · Vector CANoe · Cadence Virtuoso</td>
+          </tr>
+          <tr>
+            <td class="left model">Scientific Computing</td>
+            <td class="left envlist">TopSpin · Xcalibur · CLC Genomics Workbench · CP2K + AiiDAlab · MassHunter · BIOVIA Materials Studio · Gaussian + GaussView</td>
+          </tr>
+          <tr>
+            <td class="left model">Creative Media</td>
+            <td class="left envlist">Adobe Premiere Pro · Google Ad Manager (publisher side) · Adobe Experience Cloud · Foundry Nuke · Innovid · The Trade Desk</td>
+          </tr>
+          <tr>
+            <td class="left model">Enterprise Operations</td>
+            <td class="left envlist">Oracle E-Business Suite · Workday HCM · IFS Cloud · Cornerstone OnDemand · Oracle JD Edwards EnterpriseOne · Oracle Fusion Cloud HCM · SAP SuccessFactors Employee Central</td>
+          </tr>
+          <tr>
+            <td class="left model">Financial Services</td>
+            <td class="left envlist">FactSet Workstation · Duck Creek Policy · Bloomberg Terminal · Encompass · BlackRock Aladdin · Murex MX.3 · Guidewire ClaimCenter · Advent Geneva · Charles River IMS · Guidewire PolicyCenter</td>
+          </tr>
+          <tr>
+            <td class="left model">Commercial Platforms</td>
+            <td class="left envlist">RealPage OneSite · Manhattan Associates Active Omni · Stellar MLS · AppFolio Property Manager · Blue Yonder Luminate Commerce · Datasite Diligence</td>
+          </tr>
+          <tr>
+            <td class="left model">Supply Operations</td>
+            <td class="left envlist">Blue Yonder Warehouse Management · BestRx · Manhattan Active Warehouse Management · CargoWise One · Blue Yonder Transportation Management · PioneerRx</td>
+          </tr>
+          <tr>
+            <td class="left model">Legal Governance</td>
+            <td class="left envlist">Aderant Elite 3E · NetDocuments · ProLaw · Tyler EnerGov</td>
+          </tr>
+          <tr>
+            <td class="left model">Health Education</td>
+            <td class="left envlist">Centricity PACS · IntelliSpace PACS · Oracle Clinical One Data Collection</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </section>
