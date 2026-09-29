@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cost — CodeWorldBench</title>
+<meta name="description" content="Token usage and official API cost per CodeWorldBench environment, with the cost-versus-capability Pareto frontier for construction and repair.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#pareto">Skip to the frontier</a>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="./"><span class="prompt">$</span>CodeWorldBench</a>
+    <div class="nav-links">
+      <a href="./">Leaderboard</a>
+      <a href="benchmark.html">Benchmark</a>
+      <a href="results.html">Results</a>
+      <a href="analysis.html">Analysis</a>
+      <a href="cost.html" aria-current="page">Cost</a>
+      <a href="run.html">Run it</a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">Cost</p>
+    <h1>What a world costs to build</h1>
+    <p class="tagline">
+      Measured token usage for the seven models instrumented under Claude Code, repriced at each
+      vendor's published API rates, against what those runs actually scored.
+    </p>
+  </div>
+</header>
+
+<section id="reprice" class="flush">
+  <div class="wrap">
+    <h2><span class="hash">#</span>Why these numbers are not the paper's cost column</h2>
+    <p class="section-sub">
+      The appendix reports a billed cost per run and that figure is exact, but it is not a price
+      comparison. Reading it as one inverts the answer.
+    </p>
+    <div class="cards">
+      <div class="card">
+        <h3>Every model was billed at Opus rates</h3>
+        <p>
+          All instrumented runs went through Claude Code, whose harness computes cost from Claude
+          Opus 5's price table regardless of which model served the request. Fitting the reported
+          cost against the four token counts recovers
+          <span class="num">$5.00</span> input, <span class="num">$0.50</span> cache read and
+          <span class="num">$25.00</span> output per million in all sixteen model-setting cells, with
+          cache writes at Anthropic's own tiers. Holding that one price table fixed reproduces the
+          reported cost to within 1% on <span class="num">98.1%</span> of the 800 runs. The column
+          measures token volume in dollar units, not what a model costs.
+        </p>
+      </div>
+      <div class="card">
+        <h3>The logs separate all four billable quantities</h3>
+        <p>
+          Each result event carries uncached input, cache read, cache write and output separately, so
+          cost can be recomputed rather than approximated. This matters more than usual here: cache
+          reads are <span class="num">95.9–99.1%</span> of all input tokens in these runs, and vendors
+          discount them by 90% or more, so any estimate that ignores the cache split is wrong by an
+          order of magnitude.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Repricing changes the ranking, not the scores</h3>
+        <p>
+          At list prices the spread across these seven models is a factor of
+          <span class="num">87</span>, against <span class="num">2.2</span> in the billed column.
+          DeepSeek-v4.1-flash builds a world for <span class="num">$0.14</span> where Claude Opus 5
+          costs <span class="num">$11.91</span>, for 8.9 points less GEN. Scores are unchanged
+          throughout; only the cost axis is recomputed.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pareto">
+  <div class="wrap">
+    <h2><span class="hash">#</span>The cost-capability frontier</h2>
+    <p class="section-sub">
+      Cost per environment on a log axis, because list prices span nearly two orders of magnitude.
+      A model sits on the frontier when nothing cheaper scores as well.
+    </p>
+
+    <figure>
+      <img src="assets/figures/codeworldbench_cost_pareto.png"
+           alt="Two scatter plots of cost per environment in USD on a logarithmic x-axis. Panel (a) plots GEN construction score and panel (b) plots SWE fail-to-pass rate, for seven models under Claude Code, with a dashed staircase marking the Pareto frontier in each panel.">
+      <figcaption>
+        <b>Cost against capability, 50 common environments, Claude Code.</b> (a) Construction: the
+        frontier runs DeepSeek-v4.1-flash, DeepSeek-v4-pro, GLM-5.3-Flash, Kimi K3, Claude Opus 5.
+        (b) Repair: only DeepSeek-v4.1-flash, DeepSeek-v4-pro and Claude Opus 5 survive, because F2P
+        does not order the models the way GEN does. Filled outlines are frontier members; faded
+        points are dominated. Cost is recomputed at list prices, scores are the paper's.
+      </figcaption>
+    </figure>
+
+    <div class="stats">
+      <div class="stat">
+        <span class="n">87×</span>
+        <span class="k">list-price spread</span>
+      </div>
+      <div class="stat">
+        <span class="n">5 of 7</span>
+        <span class="k">on the GEN frontier</span>
+      </div>
+      <div class="stat">
+        <span class="n">$0.003</span>
+        <span class="k">cheapest cost per GEN point</span>
+      </div>
+      <div class="stat">
+        <span class="n">&gt;95%</span>
+        <span class="k">of input served from cache</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="table" class="flush">
+  <div class="wrap">
+    <h2><span class="hash">#</span>Token usage and cost per environment</h2>
+    <p class="section-sub">
+      Means over 50 runs per cell, one run per common environment, deduplicated to the latest attempt.
+      Token columns are counts per run; cost columns are USD per run.
+    </p>
+
+    <div class="table-scroll">
+      <table id="cost-table">
+        <thead>
+          <tr>
+            <th class="left" scope="col">Model</th>
+            <th scope="col">GEN</th>
+            <th scope="col">F2P</th>
+            <th scope="col">Input</th>
+            <th scope="col">Cache read</th>
+            <th scope="col">Cache write</th>
+            <th scope="col">Output</th>
+            <th scope="col">GEN cost</th>
+            <th scope="col">SWE cost</th>
+            <th scope="col">$/GEN pt</th>
+            <th scope="col">Billed at Opus rates</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p class="lb-hint">
+      Frontier models are marked. Click a column heading to sort.
+    </p>
+  </div>
+</section>
+
+<section id="rates">
+  <div class="wrap">
+    <h2><span class="hash">#</span>The rates used</h2>
+    <p class="section-sub">
+      Published list prices in USD per million tokens, retrieved 2026-09-28. Where a vendor does not
+      price cache writes separately, the input rate is used.
+    </p>
+
+    <div class="table-scroll">
+      <table id="rate-table">
+        <thead>
+          <tr>
+            <th class="left" scope="col">Model</th>
+            <th class="left" scope="col">Vendor</th>
+            <th scope="col">Input</th>
+            <th scope="col">Cache read</th>
+            <th scope="col">Cache write</th>
+            <th scope="col">Output</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3>Four rates carry a caveat</h3>
+        <p>
+          Claude Opus 5 uses the 1-hour cache-write rate of $10 rather than the 5-minute $6.25, because
+          every cache-creation token in these logs sits in the 1-hour bucket. DeepSeek-v4-pro uses the
+          75% reduction of 2026-05-23, which became the standing list price; the pre-cut $1.74/$3.48
+          sticker is historical. DeepSeek-v4.1-flash uses off-peak rates, and peak hours are exactly
+          double. GLM-5.3-Flash uses list price rather than its launch promo.
+        </p>
+      </div>
+      <div class="card">
+        <h3>What this comparison holds fixed</h3>
+        <p>
+          One scaffold, one subset, one attempt per environment. Cost is therefore comparable across
+          these seven models but not against the Codex rows, which report no usage, or against the 68
+          professional environments, which were not instrumented for cost.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Two models have cost but no place here</h3>
+        <p>
+          Tencent's hy4-preview logs full usage but has no published score, so it cannot be placed on
+          a cost-capability plane. Doubao and the four GPT rows ran under harnesses that record no
+          usage block at all, so no amount of repricing recovers them.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Scores are taken from the paper. Cost is recomputed from measured tokens at published rates.</p>
+    <p>Apache License 2.0.</p>
+  </div>
+</footer>
+
+<script src="js/cost.js"></script>
+</body>
+</html>
