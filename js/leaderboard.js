@@ -20,6 +20,9 @@
     // figure. The results page opts into all 19 via data-all-scaffolds, so its
     // tables mirror the paper's own tables row for row.
     defaultsOnly: document.body.dataset.allScaffolds !== "true",
+    // The home table opens on the headline columns alone; the 20 category
+    // columns are one switch away.
+    showCategories: false,
     overallSort: { key: "gen", dir: -1 },
     subsetSort: { key: "gen", dir: -1 }
   };
@@ -162,46 +165,56 @@
     var sort = state.overallSort;
     rows = sortBy(rows, sort, valueOf);
 
-    var keys = ["gen", "genCommon", "genProfessional"]
-      .concat(catsC.map(function (c) { return "c:" + c.code; }))
-      .concat(catsP.map(function (c) { return "p:" + c.code; }));
+    var withCats = state.showCategories;
+    var keys = ["gen", "genCommon", "genProfessional"];
+    if (withCats) {
+      keys = keys
+        .concat(catsC.map(function (c) { return "c:" + c.code; }))
+        .concat(catsP.map(function (c) { return "p:" + c.code; }));
+    }
     var best = columnMaxima(rows, keys, valueOf);
 
-    var table = el("table", "lb-wide");
+    var table = el("table", "lb-wide" + (withCats ? " with-cats" : ""));
     var cap = el("caption", "skip-link");
-    cap.textContent = "GEN scores over all 118 environments with per-category breakdown, " +
-      rows.length + " rows, ranked.";
+    cap.textContent = "GEN scores over all 118 environments" +
+      (withCats ? " with per-category breakdown, " : ", ") + rows.length + " rows, ranked.";
     table.appendChild(cap);
 
+    /* The group row only earns its height when the category blocks are on; alone,
+       the three GEN columns say what they are in their own headers. */
     var thead = el("thead");
-    var top = el("tr");
-    top.appendChild(plainTh("", "stick-1 left"));
-    top.appendChild(plainTh("", "stick-2 left"));
-    top.appendChild(plainTh("", "left", 2));
-    top.appendChild(plainTh("Overall GEN", "group", 3));
-    top.appendChild(plainTh("Common categories · 50 env", "group divide", catsC.length));
-    top.appendChild(plainTh("Professional categories · 68 env", "group divide", catsP.length));
-    thead.appendChild(top);
+    if (withCats) {
+      var top = el("tr");
+      top.appendChild(plainTh("", "stick-1 left"));
+      top.appendChild(plainTh("", "stick-2 left"));
+      top.appendChild(plainTh("", "left", 2));
+      top.appendChild(plainTh("Overall GEN", "group", 3));
+      top.appendChild(plainTh("Common categories · 50 env", "group divide", catsC.length));
+      top.appendChild(plainTh("Professional categories · 68 env", "group divide", catsP.length));
+      thead.appendChild(top);
+    }
 
     var tr = el("tr");
     tr.appendChild(plainTh("#", "rank stick-1"));
     tr.appendChild(sortTh("Model", "model", "left stick-2", sort, renderOverall));
     tr.appendChild(plainTh("Params.", "left"));
     tr.appendChild(plainTh("Scaffold", "left"));
-    tr.appendChild(sortTh("All 118", "gen", "big", sort, renderOverall,
-      "GEN over all 118 environments"));
-    tr.appendChild(sortTh("Com.", "genCommon", "", sort, renderOverall,
-      "GEN over the 50 common environments"));
-    tr.appendChild(sortTh("Prof.", "genProfessional", "", sort, renderOverall,
-      "GEN over the 68 professional environments"));
-    catsC.forEach(function (c, i) {
-      tr.appendChild(sortTh(c.code, "c:" + c.code, i === 0 ? "divide" : "", sort,
-        renderOverall, c.name + " (common)"));
-    });
-    catsP.forEach(function (c, i) {
-      tr.appendChild(sortTh(c.code, "p:" + c.code, i === 0 ? "divide" : "", sort,
-        renderOverall, c.name + " (professional)"));
-    });
+    tr.appendChild(sortTh(withCats ? "All 118" : "GEN · all 118", "gen", "big", sort,
+      renderOverall, "GEN over all 118 environments"));
+    tr.appendChild(sortTh(withCats ? "Com." : "Common · 50", "genCommon", "", sort,
+      renderOverall, "GEN over the 50 common environments"));
+    tr.appendChild(sortTh(withCats ? "Prof." : "Professional · 68", "genProfessional", "",
+      sort, renderOverall, "GEN over the 68 professional environments"));
+    if (withCats) {
+      catsC.forEach(function (c, i) {
+        tr.appendChild(sortTh(c.code, "c:" + c.code, i === 0 ? "divide" : "", sort,
+          renderOverall, c.name + " (common)"));
+      });
+      catsP.forEach(function (c, i) {
+        tr.appendChild(sortTh(c.code, "p:" + c.code, i === 0 ? "divide" : "", sort,
+          renderOverall, c.name + " (professional)"));
+      });
+    }
     thead.appendChild(tr);
     table.appendChild(thead);
 
@@ -236,17 +249,19 @@
           r.appendChild(td);
         });
 
-      [[catsC, "categoriesCommon", "c:"], [catsP, "categoriesProfessional", "p:"]]
-        .forEach(function (blk) {
-          blk[0].forEach(function (c, j) {
-            var v = row[blk[1]][c.code];
-            var key = blk[2] + c.code;
-            var td = el("td", "cat" + (j === 0 ? " divide" : "") +
-              (v === best[key] ? " best" : ""), fmt(v));
-            if (sort.key === key) td.classList.add("sorted-col");
-            r.appendChild(td);
+      if (withCats) {
+        [[catsC, "categoriesCommon", "c:"], [catsP, "categoriesProfessional", "p:"]]
+          .forEach(function (blk) {
+            blk[0].forEach(function (c, j) {
+              var v = row[blk[1]][c.code];
+              var key = blk[2] + c.code;
+              var td = el("td", "cat" + (j === 0 ? " divide" : "") +
+                (v === best[key] ? " best" : ""), fmt(v));
+              if (sort.key === key) td.classList.add("sorted-col");
+              r.appendChild(td);
+            });
           });
-        });
+      }
 
       tbody.appendChild(r);
     });
@@ -378,6 +393,20 @@
       toggle.addEventListener("change", function () {
         state.defaultsOnly = !toggle.checked;
         renderAll();
+      });
+    }
+
+    var catToggle = document.getElementById("show-categories");
+    if (catToggle) {
+      catToggle.checked = state.showCategories;
+      catToggle.addEventListener("change", function () {
+        state.showCategories = catToggle.checked;
+        // Hiding the category block takes its sort key with it; fall back to GEN.
+        var k = state.overallSort.key;
+        if (!state.showCategories && (k.indexOf("c:") === 0 || k.indexOf("p:") === 0)) {
+          state.overallSort = { key: "gen", dir: -1 };
+        }
+        renderOverall();
       });
     }
 

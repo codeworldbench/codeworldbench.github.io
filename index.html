@@ -9,14 +9,18 @@
 <meta property="og:description" content="118 executable environments, 25,015 hidden cases. Build a stateful code world from scratch, or repair a broken one.">
 <meta property="og:type" content="website">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="css/style.css">
+<script src="js/theme.js"></script>
 </head>
 <body>
 <a class="skip-link" href="#leaderboard">Skip to leaderboard</a>
 
 <nav class="nav">
   <div class="nav-inner">
-    <a class="nav-brand" href="./"><span class="prompt">$</span>CodeWorldBench</a>
+    <a class="nav-brand" href="./">CodeWorldBench</a>
     <div class="nav-links">
       <a href="#leaderboard">Leaderboard</a>
       <a href="benchmark.html">Benchmark</a>
@@ -25,22 +29,20 @@
       <a href="cost.html">Cost</a>
       <a href="run.html">Run it</a>
     </div>
+    <button class="theme-toggle" type="button" aria-label="Switch to light mode">
+      <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
+    </button>
   </div>
 </nav>
 
-<header class="hero hero-tight" id="top">
+<header class="hero" id="top">
   <div class="wrap">
     <p class="eyebrow">Execution-based benchmark · code-driven world construction</p>
-    <h1>How well can coding agents build<br>executable agent worlds?<span class="cursor"></span></h1>
+    <h1>How well can coding agents build executable <em>agent worlds</em>?</h1>
     <p class="tagline">
       Agents emit runnable repositories routinely. CodeWorldBench asks the harder question: does the
       world they build transition the way its specification says it should?
-    </p>
-    <p class="tagline">
-      Platforms already checkpoint agent-built sessions into reusable environments at over five
-      thousand creations per second. Capacity has a production answer; fidelity does not. A world
-      that runs but transitions incorrectly does not withhold a reward signal, it supplies a
-      misleading one.
     </p>
 
     <div class="stats">
@@ -58,23 +60,26 @@
   </div>
 </header>
 
-<section id="leaderboard" class="flush">
+<section id="leaderboard">
   <div class="wrap">
     <div class="lb-head">
-      <h2><span class="hash">#</span>Leaderboard</h2>
+      <h2>Leaderboard</h2>
       <div class="lb-controls">
         <label class="check">
-          <input type="checkbox" id="all-scaffolds">
-          Show every scaffold
+          <input type="checkbox" id="show-categories">
+          20 categories
         </label>
-        <span class="lb-hint" id="lb-overall-meta"></span>
+        <label class="check">
+          <input type="checkbox" id="all-scaffolds">
+          Every scaffold
+        </label>
       </div>
     </div>
 
     <p class="section-sub">
-      GEN is the construction pass rate over all 118 environments — the macro-average of
-      per-environment case pass rates, so every environment counts equally. Scroll right
-      for all 20 domain categories; rank and model stay pinned.
+      GEN is the construction pass rate over all 118 environments, the macro-average of
+      per-environment case pass rates, so every environment counts equally.
+      <strong>The leader scores 59.42 out of 100.</strong>
     </p>
 
     <div class="table-scroll" id="lb-overall">
@@ -83,21 +88,22 @@
 
     <p class="legend">
       OpenAI models run under Codex v0.154.0, every other model under Claude Code v2.1.251.
-      Green marks the best value in a column; click any score header to re-sort.
-      The two category taxonomies are disjoint — a common code scores only the 50 common
-      environments, a professional code only the 68 professional ones — so those columns are
-      the paper's per-subset numbers unchanged. <a href="benchmark.html#categories">Category
-      codes</a> spell out the domains; <a href="results.html">full tables</a> add the SWE
-      pass-to-pass and fail-to-pass rates per subset.
+      Green marks the best value in a column; click a score header to re-sort. Category columns
+      score only their own subset, 50 common or 68 professional environments, so each is the paper's
+      per-subset number unchanged. <a href="benchmark.html#categories">Category codes</a> spell out
+      the domains; <a href="results.html">full tables</a> add the SWE pass-to-pass and fail-to-pass
+      rates.
     </p>
   </div>
 </section>
 
 <section id="takeaways">
   <div class="wrap">
-    <h2><span class="hash">#</span>What we found</h2>
-    <div class="cards">
+    <h2>What we found</h2>
+    <div class="cards findings">
       <div class="card">
+        <span class="kicker">96.5<small>vs</small>16.5</span>
+        <span class="kicker-label">P2P vs F2P · common</span>
         <h3>Preservation looks solved. It is not the task.</h3>
         <p>
           Keeping already-correct behavior alive averages <span class="num">96.5</span> on common and
@@ -107,27 +113,33 @@
         </p>
       </div>
       <div class="card">
+        <span class="kicker">45.3</span>
+        <span class="kicker-label">Best professional F2P · open 27B</span>
         <h3>Repair is not construction.</h3>
         <p>
           The best professional repair rows are Qwen3.8-27B (<span class="num">45.3</span> and
-          <span class="num">44.9</span>), above every closed-source model — yet those same rows rank
+          <span class="num">44.9</span>), above every closed-source model, yet those same rows rank
           twelfth and seventh on construction. The two settings measure different capabilities.
         </p>
       </div>
       <div class="card">
+        <span class="kicker">45.8<small>→</small>40.7</span>
+        <span class="kicker-label">Pass rate, L1 → L3 · common</span>
         <h3>Failures are semantic, not syntactic.</h3>
         <p>
-          Generated repositories pass structural setup and then mismanage state: stale counters,
-          shallow success envelopes, inconsistent views. Agents build first and validate transition
-          rules later, or never.
+          Quadrupling the verified surface costs about five points, and the loss comes from stateful
+          coupling. Repositories pass structural setup, then mismanage state: stale counters, shallow
+          success envelopes, inconsistent views.
         </p>
       </div>
       <div class="card">
+        <span class="kicker">12–50%</span>
+        <span class="kicker-label">Of reference success, downstream</span>
         <h3>The defects reach the next agent.</h3>
         <p>
           An independent agent working inside these generated environments reaches only
           <span class="num">12%</span> to <span class="num">50%</span> of the success rate it gets in
-          the reference environments — mostly because tools are broken or missing, not because the
+          the reference environments, mostly because tools are broken or missing, not because the
           tasks got harder.
         </p>
       </div>
@@ -136,9 +148,23 @@
   </div>
 </section>
 
+<section id="why">
+  <div class="wrap">
+    <p class="eyebrow">Why it matters</p>
+    <p class="statement">
+      A world that runs but transitions incorrectly does not withhold a reward signal.
+      <em>It supplies a misleading one.</em>
+    </p>
+    <p class="statement-note">
+      Platforms already checkpoint agent-built sessions into reusable environments at over five
+      thousand creations per second. Capacity has a production answer; fidelity does not.
+    </p>
+  </div>
+</section>
+
 <section id="how">
   <div class="wrap">
-    <h2><span class="hash">#</span>How it works</h2>
+    <h2>How it works</h2>
     <p class="section-sub">
       Reference and submitted worlds start from the same seed, receive the same hidden tool calls, and
       are compared on their outputs <em>and</em> their resulting states. A repository that answers

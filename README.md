@@ -10,7 +10,7 @@ retyped.
 
 | Page | Holds |
 | --- | --- |
-| `index.html` | Hero, the all-118-environment GEN leaderboard with all 20 category columns, three takeaways, the overview figure |
+| `index.html` | Hero, the all-118-environment GEN leaderboard (20 category columns behind a switch), four takeaways, the overview figure |
 | `results.html` | Aggregation definitions, both subset tables in full, the by-subset figure, detailed observations |
 | `benchmark.html` | Task formalism, the two settings, construction pipeline, static profile, 20 domains |
 | `analysis.html` | Difficulty slices, scaffold effects, trace analysis, downstream transfer, conclusion |
@@ -42,8 +42,9 @@ table can be switched with the "Show every scaffold" checkbox.
 
 ## The 20 category columns
 
-The same table carries all twenty domain categories to the right of GEN, ten common then ten
-professional. Those columns are not aggregated across subsets and do not need to be: the two
+The same table can carry all twenty domain categories to the right of GEN, ten common then ten
+professional. They are off by default so the home table opens on the headline columns; the
+"20 categories" switch turns them on. Those columns are not aggregated across subsets and do not need to be: the two
 taxonomies are disjoint, so a common category scores only the 50 common environments and a
 professional one only the 68 professional environments. Each cell is the paper's per-subset number
 unchanged. That is why the group headers name the environment count (`· 50 env`, `· 68 env`) rather
@@ -76,6 +77,7 @@ run.html                   run instructions
 css/style.css              styles
 js/leaderboard.js          renders both table kinds, client-side sorting
 js/cost.js                 renders the two cost tables, client-side sorting
+js/theme.js                dark by default, remembers a switch to light
 data/results.json          GENERATED — do not edit by hand
 data/cost.json             GENERATED — do not edit by hand
 tools/build_results.py     regenerates data/results.json from the paper
